@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-video = cv.VideoCapture('City.mp4')
+video = cv.VideoCapture("Lake - 11571.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 
@@ -19,7 +19,7 @@ while video.isOpened():
     frame1 = frame2
     ret, frame2 = video.read()
 
-    if cv.waitKey(40) == 27:
+    if cv.waitKey(40) & 0xFF==ord('q'):
         break
 
 cv.destroyAllWindows()
