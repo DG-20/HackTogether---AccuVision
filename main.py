@@ -1,11 +1,15 @@
 import cv2 as cv
 import numpy as np
+import csv
+import time
 
+start_time = time.time()
 video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 
-
+counter = 0
+datastuff = 26000000
 while video.isOpened():
     difference = cv.absdiff(frame1, frame2)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
@@ -30,8 +34,18 @@ while video.isOpened():
     frame1 = frame2
     ret, frame2 = video.read()
 
+    #if ((int(time.time() - start_time) % 5) == 0):
+
+    #Incrementing the counters and creating a list for a row
+    counter +=1 
+    datastuff += 1
+    row_stuff = [counter,datastuff]
+    #Writing into the csv
+    with open("data/test.csv", 'a') as data:
+        writer = csv.writer(data)
+        writer.writerow(row_stuff)
     if cv.waitKey(40) & 0xFF==ord('q'):
-        break
+           break
 
 cv.destroyAllWindows()
 video.release()
