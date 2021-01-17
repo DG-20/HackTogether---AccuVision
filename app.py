@@ -1,31 +1,32 @@
-import dash
+import dash 
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+import pandas as pd
+import time
 import plotly.graph_objects as go
+import plotly.express as px
 
 app = dash.Dash(__name__)
 
-app.layout = html.Div([
-    html.P("Color:"),
-    dcc.Dropdown(
-        id="dropdown",
-        options=[
-            {'label': x, 'value': x}
-            for x in ['Gold', 'MediumTurquoise', 'LightGreen']
-        ],
-        value='Gold',
-        clearable=False,
-    ),
-    dcc.Graph(id="graph"),
-])
+df = pd.DataFrame({
+    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
+    "Amount": [4, 1, 2, 2, 4, 5],
+    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
+})
 
-@app.callback(
-    Output("graph", "figure"), 
-    [Input("dropdown", "value")])
-def display_color(color):
-    fig = go.Figure(
-        data=go.Bar(y=[2, 3, 1], marker_color=color))
-    return fig
+fig = px.line(df, x="Fruit", y="Amount", title="Stuff")
 
-app.run_server(debug=True)
+app.layout = html.Div(children =
+    [
+        html.H1("HI"),
+        html.P("asdfasdf"),
+        html.A("HIHIHI", href="https://dash.plotly.com/dash-html-components/a"), 
+        dcc.Graph(
+            figure = fig
+        )
+        
+    ])
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
+
