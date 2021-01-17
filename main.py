@@ -2,14 +2,16 @@ import cv2 as cv
 import numpy as np
 import csv
 import time
+import random
 
 start_time = time.time()
 video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 
+fps = 0
 counter = 0
-datastuff = 26000000
+datastuff = 0
 while video.isOpened():
     difference = cv.absdiff(frame1, frame2)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
@@ -22,12 +24,13 @@ while video.isOpened():
     #cv.drawContours(frame1, contours, -1, (0,255,0), 5)
 
     for contour in contours:
+        fps += 1
         (x, y, w, h) = cv.boundingRect(contour)
 
         if cv.contourArea(contour) < 900:
             continue
 
-        if (w > 400 and h > 500) and (w < 500 and h < 600):
+        if (w > 40 and h > 50) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x,y), (x+w, y+h), (0,255,0), 3)
     cv.imshow("TEST", frame1)
     #cv.imshow("TEST2", fram3)
@@ -37,8 +40,8 @@ while video.isOpened():
     #if ((int(time.time() - start_time) % 5) == 0):
 
     #Incrementing the counters and creating a list for a row
-    counter +=1 
-    datastuff += 1
+    counter = random.randint(1,5000)
+    datastuff = random.randint(1,5000)
     row_stuff = [counter,datastuff]
     #Writing into the csv
     with open("data/test.csv", 'a') as data:
@@ -47,5 +50,6 @@ while video.isOpened():
     if cv.waitKey(40) & 0xFF==ord('q'):
            break
 
+print(f"The frames per second is {fps/(time.time() - start_time)}")
 cv.destroyAllWindows()
 video.release()
