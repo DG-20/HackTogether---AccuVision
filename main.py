@@ -5,7 +5,7 @@ import time
 import random
 
 start_time = time.time()
-video = cv.VideoCapture(0)
+video = cv.VideoCapture()
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 
