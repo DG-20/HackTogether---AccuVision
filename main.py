@@ -22,9 +22,9 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     #cv.drawContours(frame1, contours, -1, (0,255,0), 5)
-
+    fps += 1
     for contour in contours:
-        fps += 1
+        
         (x, y, w, h) = cv.boundingRect(contour)
 
         if cv.contourArea(contour) < 900:
@@ -37,19 +37,23 @@ while video.isOpened():
     frame1 = frame2
     ret, frame2 = video.read()
 
-    #if ((int(time.time() - start_time) % 5) == 0):
-
+    #if int(fps)%70==0: 
+    if int(time.time()-start_time)==5:
+        start_time=time.time()
+        print (int(fps))
     #Incrementing the counters and creating a list for a row
-    counter = random.randint(1,5000)
-    datastuff = random.randint(1,5000)
-    row_stuff = [counter,datastuff]
-    #Writing into the csv
-    with open("data/test.csv", 'a') as data:
-        writer = csv.writer(data)
-        writer.writerow(row_stuff)
+        counter = random.randint(1,5000)
+        datastuff = random.randint(1,5000)
+        row_stuff = [counter,datastuff]
+        #Writing into the csv
+        with open("data/test.csv", 'a') as data:
+            writer = csv.writer(data)
+            writer.writerow(row_stuff)
+    if int(time.time()-start_time)==16:
+        break
     if cv.waitKey(40) & 0xFF==ord('q'):
-           break
+        break
 
-print(f"The frames per second is {fps/(time.time() - start_time)}")
+print(f"The time is {time.time()}")
 cv.destroyAllWindows()
 video.release()
