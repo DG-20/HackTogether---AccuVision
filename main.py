@@ -64,15 +64,15 @@ while video.isOpened():
     ret, frame2 = video.read()
 
     #if int(fps)%70==0: 
-    if int(tm.time()-start_time)==60:
+    if int(tm.time()-start_time)==5:
         start_time=tm.time()
-        if(day == "Sat"):
+        if(day == "Sun"):
             time = datetime.datetime.now()
             currentTime = "{}:{}".format(time.hour, time.minute)
             # Figure out how to replace zeros with blanks
             row = [currentTime, 0, 0, 0, 0, 0, 4, 0]
             print(f"HI")
-            with open("data/test.csv", 'a') as data:
+            with open("data/test.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
 
