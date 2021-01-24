@@ -17,8 +17,7 @@ df = pd.read_csv("data/test.csv")
 fig = px.line(df, x="Time of Day", y=" Sat", title="Stuff")
 
 
-#Line graph object created
-fig = px.line(df, x="Time of Day", y="Number of People Inside", title="Number of People Inside a Store at Different Times of Day" )
+
 app.layout = html.Div(children =
     [
         #Random HTML
@@ -37,30 +36,3 @@ if __name__ == '__main__':
 
 #Creating figure
 
-fig = go.Figure()
-#Adding surface trace
-fig.add_trace(go.Surface(z= df.values.tolist(), colorscale = "tealgrn"))
-
-#Update plot sizing
-
-fig.update_layout(
-    width = 800,
-    height = 800,
-    autosize = False,
-    margin=dict(t=0, b=0, l=0, r=0),
-    template = "gridon",
-)
-
-#Adding dropdown menu
-
-fig.update_layout(
-    updatemenus = [
-        dict(
-            buttons = list([
-                dict(
-                    args = ["type", ]
-                )
-
-                )
-            ])
-        )
