@@ -89,7 +89,9 @@ while video.isOpened():
     if cv.waitKey(40) & 0xFF==ord('q'):
         break
 
-
+#Counts number of rows in the csv
+row_count = sum(1 for row in csv.reader(open('data/test.csv')))
+print(row_count)
 print(f"The time is {tm.time()}")
 cv.destroyAllWindows()
 video.release()
