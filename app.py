@@ -12,7 +12,7 @@ app = dash.Dash(__name__)
 df = pd.read_csv("data/test.csv")
 
 #Line graph object created
-fig = px.line(df, x="Fruit", y="Amount", title="Stuff")
+fig = px.line(df, x="Time of Day", y=" Sat", title="Stuff")
 
 app.layout = html.Div(children =
     [
