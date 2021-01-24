@@ -13,11 +13,8 @@ app = dash.Dash(__name__)
 #Reading data
 df = pd.read_csv("data/test.csv")
 
-<<<<<<< HEAD
 #Line graph object created
 fig = px.line(df, x="Time of Day", y=" Sat", title="Stuff")
-=======
->>>>>>> 6b656e7cf96c5e1194c1f7831c79020d303e181b
 
 
 #Line graph object created
