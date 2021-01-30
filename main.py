@@ -69,7 +69,7 @@ while video.isOpened():
             time = datetime.datetime.now()
             currentTime = "{}:{}".format(time.hour, time.minute)
             # Figure out how to replace zeros with blanks
-            row = [currentTime, 0, 0, 0, 0, 0, 4, 0]
+            row = [currentTime, 0, 0, 0, 0, 0, random.randint(0,100), 0]
             print(f"HI")
             with open("data/test.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
@@ -93,4 +93,4 @@ row_count = sum(1 for row in csv.reader(open('data/test.csv')))
 print(row_count)
 print(f"The time is {tm.time()}")
 cv.destroyAllWindows()
-video.release()]
+video.release()

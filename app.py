@@ -29,11 +29,8 @@ app = dash.Dash(__name__)
 
 
 # Reading data
-df = pd.read_csv("data/test.csv")
-
-# Line graph object created
-fig = px.line(df, x="Time of Day", y = day, title="Stuff")
-
+df = pd.read_csv("data/mon.csv")
+df2 = pd.read_csv("data/tues.csv")
 
 app.layout = html.Div(
     children=[
@@ -55,6 +52,31 @@ app.layout = html.Div(
             multi=True,
             value="Sat",
         ),
+        updatemenus=list([
+    dict(
+        buttons=list([
+            dict(
+                args=['type', 'surface'],
+                label='3D Surface',
+                method='restyle'
+            ),
+            dict(
+                args=['type', 'heatmap'],
+                label='Heatmap',
+                method='restyle'
+            )
+        ]),
+        direction = 'down',
+        pad = {'r': 10, 't': 10},
+        showactive = True,
+        x = 0.1,
+        xanchor = 'left',
+        y = 1.1,
+        yanchor = 'top'
+    ),
+])
+layout['updatemenus'] = updatemenus
+        html.H1(),
         html.Button("Saturday", id="btn-1", n_clicks=0),
         html.Button("Sunday", id="btn-2", n_clicks=0),
         html.Button("Monday", id="btn-3", n_clicks=0),
@@ -81,7 +103,8 @@ app.layout = html.Div(
             # value = day,
         ),
         # The actual graph to display
-        dcc.Graph(figure=fig),
+        dcc.Graph(figure=px.line(df, x="Time of Day", y = "value", title="Stuff")),
+        dcc.Graph(figure=px.line(df2, x="Time of Day", y = "value", title="Stuff2")),
         html.Div(id="test"),
     ]
 )
@@ -100,7 +123,7 @@ app.layout = html.Div(
 def ifClicked(btn1, btn2, btn3, btn4, btn5, btn6, btn7):
     change_id = [p["prop_id"] for p in dash.callback_context.triggered][0]
     if "btn-1" in change_id:
-        message = "Button 1 was pressed"
+        fig2 = px.line(df, x = "Time of Day", y = "Saturday", title = "Stuff")
     elif "btn-2" in change_id:
         message = "Button 2 was pressed"
     elif "btn-3" in change_id:
@@ -115,7 +138,7 @@ def ifClicked(btn1, btn2, btn3, btn4, btn5, btn6, btn7):
         message = "Button 7 was pressed"
     else:
         message = "Nothing was pressed"
-    return html.Div(message)
+    return html.Div(fig2)
 
 
 @app.callback(
