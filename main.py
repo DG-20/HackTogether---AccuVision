@@ -29,7 +29,6 @@ def dayGetter(day, month, year):
     day_of_week = days[dayIndex.weekday()]
     return (day_of_week)
 
-
 day = get_day()
 
 
@@ -94,4 +93,4 @@ row_count = sum(1 for row in csv.reader(open('data/test.csv')))
 print(row_count)
 print(f"The time is {tm.time()}")
 cv.destroyAllWindows()
-video.release()
+video.release()]
