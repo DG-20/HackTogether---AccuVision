@@ -74,7 +74,7 @@ while video.isOpened():
             with open("data/test.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
-
+ 
     #Incrementing the counters and creating a list for a row
         counter = random.randint(1,5000)
         datastuff = random.randint(1,5000)
