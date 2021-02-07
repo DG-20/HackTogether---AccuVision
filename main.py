@@ -12,9 +12,13 @@ video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
-# These two function provide the day of the week
 
+row = ["Time of Day","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+with open("data/week1.csv", 'a', newline='') as data:
+    writer = csv.writer(data)
+    writer.writerow(row)
 
+# These two functions provide the day of the week
 def get_day():
     current_date = date.today()
     year = current_date.year
@@ -23,11 +27,14 @@ def get_day():
     dayOfWeek = dayGetter(day, month, year)
     return dayOfWeek
 
+global dayNum
 
 def dayGetter(day, month, year):
     days = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
     # dayIndex is an object of datetime
     dayIndex = datetime.date(year, month, day)
+    global dayNum
+    dayNum = dayIndex.weekday()
     # .weekday is a method of this object (returns a number)
     day_of_week = days[dayIndex.weekday()]
     return (day_of_week)
@@ -46,6 +53,7 @@ counter = 0
 datastuff = 0
 previous_x = 640
 while video.isOpened():
+    day = get_day()
     difference = cv.absdiff(frame1, frame2)
     cv.imshow("divy", difference)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
@@ -70,6 +78,9 @@ while video.isOpened():
         print(f"Previous x is: {previous_x}, x is: {x}")
         if cv.contourArea(contour) < 900:
             continue
+            
+            #ADD FPS %3 == 0 (EVERY THIRD FRAME), DO PREVIOUS_X < X THEN INCREASE COUNTER ETC
+
 
         if (w > 125 and h > 275) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
@@ -98,23 +109,44 @@ while video.isOpened():
     frame1 = frame2
     ret, frame2 = video.read()
 
+    currentTime = "0:0"
     # if int(fps)%70==0:
-    if int(tm.time()-start_time) == 5:
+    if int(tm.time()-start_time) == 10:
         start_time = tm.time()
-        if(day == "Sun"):
-            time = datetime.datetime.now()
+        print(f"HI")
+        #if(day == "Sun"):
+        time = datetime.datetime.now()
+        if time.minute < 10:
+            currentTime = "{}:0{}".format(time.hour, time.minute)
+        else:
             currentTime = "{}:{}".format(time.hour, time.minute)
+
             # Figure out how to replace zeros with blanks
-            row = [currentTime, 0, 0, 0, 0, 0, random.randint(0, 100), 0]
-            print(f"HI")
-            with open("data/test.csv", 'a', newline='') as data:
+        if int(tm.time() - start_time) >= 604800:
+            file = open("data/week2.csv")
+            reader = csv.reader(file)
+            lines= len(list(reader))
+            if lines == 0:
+                row = ["Time of Day","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+                writer = csv.writer(file)
+                writer.writerow(row)
+
+            row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
+            row[dayNum + 1] = 4
+            with open("data/week2.csv", 'a', newline='') as data:
+                writer = csv.writer(data)
+                writer.writerow(row)
+        else:
+            row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
+            row[dayNum + 1] = 4
+            with open("data/week1.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
 
     # Incrementing the counters and creating a list for a row
-        counter = random.randint(1, 5000)
-        datastuff = random.randint(1, 5000)
-        row_stuff = [counter, datastuff]
+    #counter = random.randint(1, 5000)
+    #datastuff = random.randint(1, 5000)
+    #row_stuff = [counter, datastuff]
         # Writing into the csv
         # with open("data/test.csv", 'a') as data:
         #writer = csv.writer(data)
