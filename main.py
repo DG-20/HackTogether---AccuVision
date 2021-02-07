@@ -12,7 +12,9 @@ video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
-#These two function provide the day of the week
+# These two function provide the day of the week
+
+
 def get_day():
     current_date = date.today()
     year = current_date.year
@@ -20,96 +22,109 @@ def get_day():
     day = current_date.day
     dayOfWeek = dayGetter(day, month, year)
     return dayOfWeek
-    
+
+
 def dayGetter(day, month, year):
     days = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
-    #dayIndex is an object of datetime
+    # dayIndex is an object of datetime
     dayIndex = datetime.date(year, month, day)
     # .weekday is a method of this object (returns a number)
     day_of_week = days[dayIndex.weekday()]
     return (day_of_week)
 
+
 day = get_day()
 
-windowWidth=frame1.shape[1]
-windowHeight=frame1.shape[0]
+windowWidth = frame1.shape[1]
+windowHeight = frame1.shape[0]
 print(windowWidth)
 print(windowHeight)
-
 
 
 fps = 0
 counter = 0
 datastuff = 0
+previous_x = 640
 while video.isOpened():
     difference = cv.absdiff(frame1, frame2)
+    cv.imshow("divy", difference)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
-    blurred = cv.GaussianBlur(greyScale, (1,1), 0)
+    blurred = cv.GaussianBlur(greyScale, (21, 21), 0)
+    # blurred2=cv.absdiff(frame1,blurred)
     dilated = cv.dilate(blurred, None, iterations=1)
     fram3 = cv.Canny(blurred, 125, 175)
     _, thresh = cv.threshold(blurred, 20, 255, cv.THRESH_BINARY)
     dilated = cv.dilate(thresh, None, iterations=3)
-    contours, _ = cv.findContours(dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    #cv.drawContours(frame1, contours, -1, (0,255,0), 5)
+    contours, _ = cv.findContours(
+        dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+   # cv.drawContours(frame1, contours, -1, (0,255,0), 5)
     fps += 1
 
-
+    cv.imshow("frame1", frame1)
     for contour in contours:
         going_right = 0
         going_left = 0
+        # if cv.contourArea(contour) < 20000:
+        #    continue
         (x, y, w, h) = cv.boundingRect(contour)
-
+        print(f"Previous x is: {previous_x}, x is: {x}")
         if cv.contourArea(contour) < 900:
             continue
 
-        if (w > 100 and h > 200) and (w < 500 and h < 600):
-            cv.rectangle(frame1, (x,y), (x+w, y+h), (0,255,0), 3)
-            #CORRECT DIMENSIONS
-            #if x < 200 and x > 190:
-            #    person_counter += 1
-        if (x > 280):
-            if (x > 290):
-                going_right = 1
-        if (x < 280):
-            if x < 270:
-                going_left = 1
-
-        if (x < 590 and x > 580 and going_right == 1):
-            person_counter -= 1
-        if (x > 100 and x < 110 and going_left == 1):
+        if (w > 125 and h > 275) and (w < 500 and h < 600):
+            cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
+        # CORRECT DIMENSIONS
+        # if x < 200 and x > 190:
+        #    person_counter += 1
+        # if (x > 280 and x < 290):
+        if (previous_x < x):
             person_counter += 1
+ #   if (x < 280):
+      #  if x < 270:
+          #  going_left = 1
+
+        # if (x < 590 and x > 580):
+        if previous_x > x:
+            if person_counter == 0:
+                person_counter = 0
+            elif person_counter > 0:
+                person_counter -= 1
+
+        previous_x = x
+       # if (x > 100 and x < 110 and going_left == 1):
+        #person_counter += 1
     cv.imshow("TEST", frame1)
     #cv.imshow("TEST2", fram3)
     frame1 = frame2
     ret, frame2 = video.read()
 
-    #if int(fps)%70==0: 
-    if int(tm.time()-start_time)==5:
-        start_time=tm.time()
+    # if int(fps)%70==0:
+    if int(tm.time()-start_time) == 5:
+        start_time = tm.time()
         if(day == "Sun"):
             time = datetime.datetime.now()
             currentTime = "{}:{}".format(time.hour, time.minute)
             # Figure out how to replace zeros with blanks
-            row = [currentTime, 0, 0, 0, 0, 0, random.randint(0,100), 0]
+            row = [currentTime, 0, 0, 0, 0, 0, random.randint(0, 100), 0]
             print(f"HI")
             with open("data/test.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
- 
-    #Incrementing the counters and creating a list for a row
-        counter = random.randint(1,5000)
-        datastuff = random.randint(1,5000)
-        row_stuff = [counter,datastuff]
-        #Writing into the csv
-        #with open("data/test.csv", 'a') as data:
-            #writer = csv.writer(data)
-            #writer.writerow(row_stuff)
-    #if int(tm.time()-start_time)==16:
-        #break
-    if cv.waitKey(40) & 0xFF==ord('q'):
+
+    # Incrementing the counters and creating a list for a row
+        counter = random.randint(1, 5000)
+        datastuff = random.randint(1, 5000)
+        row_stuff = [counter, datastuff]
+        # Writing into the csv
+        # with open("data/test.csv", 'a') as data:
+        #writer = csv.writer(data)
+        # writer.writerow(row_stuff)
+    # if int(tm.time()-start_time)==16:
+        # break
+    if cv.waitKey(40) & 0xFF == ord('q'):
         break
 
-#Counts number of rows in the csv
+# Counts number of rows in the csv
 row_count = sum(1 for row in csv.reader(open('data/test.csv')))
 print(row_count)
 print(f"The time is {tm.time()}")
