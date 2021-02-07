@@ -31,6 +31,10 @@ def dayGetter(day, month, year):
 
 day = get_day()
 
+windowWidth=frame1.shape[1]
+windowHeight=frame1.shape[0]
+print(windowWidth)
+print(windowHeight)
 
 
 
@@ -48,8 +52,11 @@ while video.isOpened():
     contours, _ = cv.findContours(dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     #cv.drawContours(frame1, contours, -1, (0,255,0), 5)
     fps += 1
+
+
     for contour in contours:
-        
+        going_right = 0
+        going_left = 0
         (x, y, w, h) = cv.boundingRect(contour)
 
         if cv.contourArea(contour) < 900:
@@ -57,8 +64,20 @@ while video.isOpened():
 
         if (w > 100 and h > 200) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x,y), (x+w, y+h), (0,255,0), 3)
-            if x < 200 and x > 190:
-                person_counter += 1
+            #CORRECT DIMENSIONS
+            #if x < 200 and x > 190:
+            #    person_counter += 1
+        if (x > 280):
+            if (x > 290):
+                going_right = 1
+        if (x < 280):
+            if x < 270:
+                going_left = 1
+
+        if (x < 590 and x > 580 and going_right == 1):
+            person_counter -= 1
+        if (x > 100 and x < 110 and going_left == 1):
+            person_counter += 1
     cv.imshow("TEST", frame1)
     #cv.imshow("TEST2", fram3)
     frame1 = frame2
