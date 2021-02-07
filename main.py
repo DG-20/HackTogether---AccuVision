@@ -55,7 +55,7 @@ while video.isOpened():
         if cv.contourArea(contour) < 900:
             continue
 
-        if (w > 40 and h > 50) and (w < 500 and h < 600):
+        if (w > 100 and h > 200) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x,y), (x+w, y+h), (0,255,0), 3)
     cv.imshow("TEST", frame1)
     #cv.imshow("TEST2", fram3)
