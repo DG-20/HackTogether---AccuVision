@@ -11,7 +11,7 @@ start_time = tm.time()
 video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
-
+person_counter = 0
 #These two function provide the day of the week
 def get_day():
     current_date = date.today()
@@ -57,6 +57,8 @@ while video.isOpened():
 
         if (w > 100 and h > 200) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x,y), (x+w, y+h), (0,255,0), 3)
+            if x < 200 and x > 190:
+                person_counter += 1
     cv.imshow("TEST", frame1)
     #cv.imshow("TEST2", fram3)
     frame1 = frame2
@@ -94,3 +96,4 @@ print(row_count)
 print(f"The time is {tm.time()}")
 cv.destroyAllWindows()
 video.release()
+print(f"The number of people are {person_counter}")
