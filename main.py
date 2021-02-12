@@ -47,13 +47,13 @@ def dayGetter(day, month, year):
 
 day = get_day()
 
-#windowWidth = frame1.shape[1]
-#windowHeight = frame1.shape[0]
-#print(windowWidth)
-#print(windowHeight)
+windowWidth = frame1.shape[1]
+windowHeight = frame1.shape[0]
+print(windowWidth)
+print(windowHeight)
 
 
-previous_x = 640
+previous_x = windowWidth/2
 
 
 def largestContour(contours):
@@ -72,10 +72,16 @@ def findContour(contours, area):
             stuff = (x, y, w, h) = cv.boundingRect(contour)
     return stuff
 
+
 going_left = False
-going_right = True
+going_right = False
 counter = 0
+contourCount = 0
 while video.isOpened():
+    cv.resize(frame1, (640, 480))
+    cv.resize(frame2, (640, 480))
+    going_left = False
+    going_right = False
     day = get_day()
     counter += 1
     difference = cv.absdiff(frame1, frame2)
@@ -91,20 +97,43 @@ while video.isOpened():
     #contourS = [0]
     # contour = max(contours, key = cv.contourArea)
     for contour in contours:
-        (x,y,w,h) = cv.boundingRect(contour)
-        if (cv.contourArea(contour) > 350):
-            cv.rectangle(frame1,x,y,x + w, h + y)
+        (x, y, w, h) = cv.boundingRect(contour)
+        if cv.contourArea(contour) > 20000:
+            cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
+            contourCount += 1
+            if contourCount == 1:
+                previous_x = x
+            # print(previous_x)
+            if previous_x < x:
+                print("Right")
+                going_right = True
 
+            elif previous_x > x:
+                print("Left")
+                going_left = True
 
+            if going_left == True:
+                print(x + w)
+                if x + w/2 > 150 and x + w/2 < 170:
+                    print("GOING LEFT")
+                    # if person_counter == 0:
+                    #    person_counter = 0
+                    # else:
+                    person_counter -= 1
+                    going_left = False
 
+            if going_right == True:
+                if x + w/2 > 450 and x + w/2 < 470:
+                    print("GOING RIGHT")
+                    person_counter += 1
+                    going_right = False
 
-    #print(contourS)
+            if counter % 3 == 0:
+                previous_x = x
 
-
-
-
-
-    cv.imshow("frame1", frame1)
+    # print(contourS)
+    resize = cv.resize(frame1, (640, 480))
+    cv.imshow("frame1", resize)
     """
     #contour = max(contours)
     con = largestContour(contours)
