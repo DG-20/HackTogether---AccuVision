@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture("People - 17112.mp4")
+video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -88,7 +88,21 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    #contourS = [0]
     # contour = max(contours, key = cv.contourArea)
+    for contour in contours:
+        (x,y,w,h) = cv.boundingRect(contour)
+        if (cv.contourArea(contour) > 350):
+            cv.rectangle(frame1,x,y,x + w, h + y)
+
+
+
+
+    #print(contourS)
+
+
+
+
 
     cv.imshow("frame1", frame1)
     """
@@ -110,22 +124,21 @@ while video.isOpened():
     
     #(x, y, w, h) = cv.boundingRect(cons)
 
-    """
     for contour in contours:
        
         #going_right = 0
         #going_left = 0
-        # if cv.contourArea(contour) < 20000:
+        #if cv.contourArea(contour) < 20000:
         #    continue
         (x, y, w, h) = cv.boundingRect(contour)
         #print(f"Previous x is: {previous_x}, x is: {x}")
-        if cv.contourArea(contour) < 900:
-            continue
-        print(cv.contourArea(contour))
+        #if cv.contourArea(contour) < 900:
+        #    continue
+        #print(cv.contourArea(contour))
 
             # ADD FPS %3 == 0 (EVERY THIRD FRAME), DO PREVIOUS_X < X THEN INCREASE COUNTER ETC
 
-        if (w > 125 and h > 275) and (w < 500 and h < 600):
+        if (w > 125 and h > 175) and (w < 700 and h < 800):
             cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
         # CORRECT DIMENSIONS
         # if x < 200 and x > 190:
@@ -147,7 +160,7 @@ while video.isOpened():
         previous_x = x
        # if (x > 100 and x < 110 and going_left == 1):
         # person_counter += 1
-    
+    """
     cv.imshow("TEST", frame1)
     # cv.imshow("TEST2", fram3)
     frame1 = frame2
