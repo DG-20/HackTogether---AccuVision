@@ -13,12 +13,15 @@ ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
 
-row = ["Time of Day","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
+       "Thursday", "Friday", "Saturday", "Sunday"]
 with open("data/week1.csv", 'a', newline='') as data:
     writer = csv.writer(data)
     writer.writerow(row)
 
 # These two functions provide the day of the week
+
+
 def get_day():
     current_date = date.today()
     year = current_date.year
@@ -27,7 +30,9 @@ def get_day():
     dayOfWeek = dayGetter(day, month, year)
     return dayOfWeek
 
+
 global dayNum
+
 
 def dayGetter(day, month, year):
     days = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
@@ -48,39 +53,66 @@ print(windowWidth)
 print(windowHeight)
 
 
-fps = 0
-counter = 0
-datastuff = 0
 previous_x = 640
+
+
+def largestContour(contours):
+    largest = 0
+    for contour in contours:
+        if cv.contourArea(contour) > largest:
+            largest = cv.contourArea(contour)
+    return largest
+
+
+def findContour(contours, area):
+    stuff = (1, 2, 3, 4)
+    for contour in contours:
+        if cv.contourArea(contour) == area:
+            print(cv.contourArea(contour))
+            stuff = (x, y, w, h) = cv.boundingRect(contour)
+    return stuff
+
+
 while video.isOpened():
     day = get_day()
     difference = cv.absdiff(frame1, frame2)
     cv.imshow("divy", difference)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
     blurred = cv.GaussianBlur(greyScale, (21, 21), 0)
-    # blurred2=cv.absdiff(frame1,blurred)
     dilated = cv.dilate(blurred, None, iterations=1)
     fram3 = cv.Canny(blurred, 125, 175)
     _, thresh = cv.threshold(blurred, 20, 255, cv.THRESH_BINARY)
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-   # cv.drawContours(frame1, contours, -1, (0,255,0), 5)
-    fps += 1
+    # contour = max(contours, key = cv.contourArea)
 
     cv.imshow("frame1", frame1)
+    #contour = max(contours)
+    con = largestContour(contours)
+    print(con)
+    print("HI")
+    cons = findContour(contours, con)
+    cv.rectangle(frame1, (cons[0], cons[1]),
+                 (cons[0]+cons[2], cons[1]+cons[3]), (0, 255, 0), 3)
+    if cons[0] >= 200 and cons[0] <= 205:
+        person_counter = + 1
+    #(x, y, w, h) = cv.boundingRect(cons)
+
+    """
     for contour in contours:
-        going_right = 0
-        going_left = 0
+       
+        #going_right = 0
+        #going_left = 0
         # if cv.contourArea(contour) < 20000:
         #    continue
         (x, y, w, h) = cv.boundingRect(contour)
-        print(f"Previous x is: {previous_x}, x is: {x}")
+        #print(f"Previous x is: {previous_x}, x is: {x}")
         if cv.contourArea(contour) < 900:
             continue
-            
-            #ADD FPS %3 == 0 (EVERY THIRD FRAME), DO PREVIOUS_X < X THEN INCREASE COUNTER ETC
+        print(cv.contourArea(contour))
 
+            # ADD FPS %3 == 0 (EVERY THIRD FRAME), DO PREVIOUS_X < X THEN INCREASE COUNTER ETC
 
         if (w > 125 and h > 275) and (w < 500 and h < 600):
             cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
@@ -103,9 +135,10 @@ while video.isOpened():
 
         previous_x = x
        # if (x > 100 and x < 110 and going_left == 1):
-        #person_counter += 1
+        # person_counter += 1
+        """
     cv.imshow("TEST", frame1)
-    #cv.imshow("TEST2", fram3)
+    # cv.imshow("TEST2", fram3)
     frame1 = frame2
     ret, frame2 = video.read()
 
@@ -114,7 +147,7 @@ while video.isOpened():
     if int(tm.time()-start_time) == 10:
         start_time = tm.time()
         print(f"HI")
-        #if(day == "Sun"):
+        # if(day == "Sun"):
         time = datetime.datetime.now()
         if time.minute < 10:
             currentTime = "{}:0{}".format(time.hour, time.minute)
@@ -125,9 +158,10 @@ while video.isOpened():
         if int(tm.time() - start_time) >= 604800:
             file = open("data/week2.csv")
             reader = csv.reader(file)
-            lines= len(list(reader))
+            lines = len(list(reader))
             if lines == 0:
-                row = ["Time of Day","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+                row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
+                       "Thursday", "Friday", "Saturday", "Sunday"]
                 writer = csv.writer(file)
                 writer.writerow(row)
 
@@ -143,16 +177,6 @@ while video.isOpened():
                 writer = csv.writer(data)
                 writer.writerow(row)
 
-    # Incrementing the counters and creating a list for a row
-    #counter = random.randint(1, 5000)
-    #datastuff = random.randint(1, 5000)
-    #row_stuff = [counter, datastuff]
-        # Writing into the csv
-        # with open("data/test.csv", 'a') as data:
-        #writer = csv.writer(data)
-        # writer.writerow(row_stuff)
-    # if int(tm.time()-start_time)==16:
-        # break
     if cv.waitKey(40) & 0xFF == ord('q'):
         break
 
