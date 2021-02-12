@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture(0)
+video = cv.VideoCapture("People - 17112.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -47,10 +47,10 @@ def dayGetter(day, month, year):
 
 day = get_day()
 
-windowWidth = frame1.shape[1]
-windowHeight = frame1.shape[0]
-print(windowWidth)
-print(windowHeight)
+#windowWidth = frame1.shape[1]
+#windowHeight = frame1.shape[0]
+#print(windowWidth)
+#print(windowHeight)
 
 
 previous_x = 640
@@ -72,9 +72,12 @@ def findContour(contours, area):
             stuff = (x, y, w, h) = cv.boundingRect(contour)
     return stuff
 
-
+going_left = False
+going_right = True
+counter = 0
 while video.isOpened():
     day = get_day()
+    counter += 1
     difference = cv.absdiff(frame1, frame2)
     cv.imshow("divy", difference)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)
@@ -88,6 +91,7 @@ while video.isOpened():
     # contour = max(contours, key = cv.contourArea)
 
     cv.imshow("frame1", frame1)
+    """
     #contour = max(contours)
     con = largestContour(contours)
     print(con)
@@ -95,8 +99,15 @@ while video.isOpened():
     cons = findContour(contours, con)
     cv.rectangle(frame1, (cons[0], cons[1]),
                  (cons[0]+cons[2], cons[1]+cons[3]), (0, 255, 0), 3)
-    if cons[0] >= 200 and cons[0] <= 205:
-        person_counter += 1
+    if cons[0] > 310 and cons[0] < 320:
+        if (counter % 2) == 1:
+            previous_x = cons[0]
+    if (counter % 2) == 0:
+        if cons[0] > 320:
+            going_right = True
+        if cons[0] >= 100 and cons[0] <= 105:
+            person_counter += 1
+    
     #(x, y, w, h) = cv.boundingRect(cons)
 
     """
@@ -136,7 +147,7 @@ while video.isOpened():
         previous_x = x
        # if (x > 100 and x < 110 and going_left == 1):
         # person_counter += 1
-        """
+    
     cv.imshow("TEST", frame1)
     # cv.imshow("TEST2", fram3)
     frame1 = frame2
