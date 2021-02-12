@@ -96,7 +96,7 @@ while video.isOpened():
     cv.rectangle(frame1, (cons[0], cons[1]),
                  (cons[0]+cons[2], cons[1]+cons[3]), (0, 255, 0), 3)
     if cons[0] >= 200 and cons[0] <= 205:
-        person_counter = + 1
+        person_counter += 1
     #(x, y, w, h) = cv.boundingRect(cons)
 
     """
