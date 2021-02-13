@@ -97,8 +97,10 @@ while video.isOpened():
     #contourS = [0]
     # contour = max(contours, key = cv.contourArea)
     for contour in contours:
+        cv.putText(frame1,'Number Of People',(10,50), cv.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 2, cv.LINE_AA)
+
         (x, y, w, h) = cv.boundingRect(contour)
-        if cv.contourArea(contour) > 20000:
+        if cv.contourArea(contour) > 10000:
             cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
             contourCount += 1
             if contourCount == 1:
