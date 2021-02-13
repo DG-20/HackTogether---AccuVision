@@ -222,13 +222,13 @@ while video.isOpened():
                 writer.writerow(row)
 
             row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
-            row[dayNum + 1] = 4
+            row[dayNum + 1] = person_counter
             with open("data/week2.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
         else:
             row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
-            row[dayNum + 1] = 4
+            row[dayNum + 1] = person_counter
             with open("data/week1.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
