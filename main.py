@@ -117,16 +117,16 @@ while video.isOpened():
 
             if going_left == True:
                 print(x + w)
-                if x + w/2 > 150 and x + w/2 < 170:
+                if x > 150 and x < 170:
                     print("GOING LEFT")
-                    # if person_counter == 0:
-                    #    person_counter = 0
-                    # else:
-                    person_counter -= 1
-                    going_left = False
+                    if person_counter <= 0:
+                        person_counter = 0
+                    else:
+                        person_counter -= 1
+                        going_left = False
 
             if going_right == True:
-                if x + w/2 > 450 and x + w/2 < 470:
+                if x + w > 500 and x + w < 520:
                     print("GOING RIGHT")
                     person_counter += 1
                     going_right = False
