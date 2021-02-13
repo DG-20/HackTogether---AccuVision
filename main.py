@@ -79,7 +79,7 @@ counter = 0
 contourCount = 0
 while video.isOpened():
     cv.resize(frame1, (640, 480))
-    cv.resize(frame2, (640, 480))
+   # cv.resize(frame2, (640, 480))
     going_left = False
     going_right = False
     day = get_day()
@@ -123,7 +123,7 @@ while video.isOpened():
                     going_left = False
 
             if going_right == True:
-                if x + w > 500 and x + w < 510:
+                if x + w > windowWidth - 165 and x + w < windowWidth - 145:
                     print("GOING RIGHT")
                     if person_counter <= 0:
                         person_counter = 0
