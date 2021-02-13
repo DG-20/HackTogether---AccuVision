@@ -8,10 +8,11 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture(0)
+video = cv.VideoCapture("videos/m1.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
+PositionMarker = ""
 
 row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
        "Thursday", "Friday", "Saturday", "Sunday"]
@@ -79,7 +80,6 @@ counter = 0
 contourCount = 0
 while video.isOpened():
     cv.resize(frame1, (640, 480))
-   # cv.resize(frame2, (640, 480))
     going_left = False
     going_right = False
     day = get_day()
@@ -96,8 +96,9 @@ while video.isOpened():
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     #contourS = [0]
     # contour = max(contours, key = cv.contourArea)
-    cv.putText(frame1, f"Num: {person_counter}", (10, 50),
+    cv.putText(frame1, f"Num: {person_counter}", (10, 30),
                cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
+    cv.putText(frame1,f"Status: {PositionMarker}",(330,30), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
     for contour in contours:
 
         (x, y, w, h) = cv.boundingRect(contour)
@@ -108,11 +109,11 @@ while video.isOpened():
                 previous_x = x
             # print(previous_x)
             if previous_x < x:
-                print("Right")
+                PositionMarker = "Going Right"
                 going_right = True
 
             elif previous_x > x:
-                print("Left")
+                PositionMarker = "Going Left"
                 going_left = True
 
             if going_left == True:
@@ -130,6 +131,11 @@ while video.isOpened():
                     else:
                         person_counter -= 1
                     going_right = False
+
+            if previous_x == x:
+                PositionMarker = "Stationary"
+            if cv.boundingRect(contour) == None:
+                PositionMarker = ""
 
             if counter % 3 == 0:
                 previous_x = x
