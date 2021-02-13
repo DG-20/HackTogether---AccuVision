@@ -50,8 +50,6 @@ day = get_day()
 
 windowWidth = frame1.shape[1]
 windowHeight = frame1.shape[0]
-print(windowWidth)
-print(windowHeight)
 
 previous_x = windowWidth/2
 
@@ -93,6 +91,7 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+        
     if len(contours) < 1:
         PositionMarker = "NO MOTION"
 
@@ -107,7 +106,7 @@ while video.isOpened():
             contourCount += 1
             if contourCount == 1:
                 previous_x = x
-            # print(previous_x)
+
             if previous_x < x:
                 PositionMarker = "Going Right"
                 going_right = True
@@ -117,23 +116,17 @@ while video.isOpened():
                 going_left = True
 
             if going_left == True:
-                print(x + w)
                 if (x > 150 and x < 165):
-                    print("GOING LEFT")
                     person_counter += 1         
                     going_left = False
 
             if going_right == True:
                 if x + w > windowWidth - 165 and x + w < windowWidth - 160:
-                    print("GOING RIGHT")
                     if person_counter <= 0:
                         person_counter = 0
                     else:
                         person_counter -= 1
                     going_right = False
-
-            if previous_x == x:
-                PositionMarker = "Stationary"
 
             if counter % 3 == 0:
                 previous_x = x
@@ -148,7 +141,6 @@ while video.isOpened():
     # if int(fps)%70==0:
     if int(tm.time()-start_time) == 10:
         start_time = tm.time()
-        print(f"HI")
         # if(day == "Sun"):
         time = datetime.datetime.now()
         if time.minute < 10:
@@ -183,9 +175,6 @@ while video.isOpened():
         break
 
 # Counts number of rows in the csv
-row_count = sum(1 for row in csv.reader(open('data/test.csv')))
-print(row_count)
-print(f"The time is {tm.time()}")
 cv.destroyAllWindows()
 video.release()
 print(f"The number of people are {person_counter}")
