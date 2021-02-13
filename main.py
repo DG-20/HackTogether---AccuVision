@@ -93,13 +93,14 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    if len(contours) < 1:
+        PositionMarker = "NO MOTION"
 
-    cv.putText(frame1, f"Num: {person_counter}", (10, 30),
-               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
-    cv.putText(frame1, f"Status: {PositionMarker}", (330, 30),
-               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
+    cv.putText(frame1, f"# PEOPLE: {person_counter}", (10, 30),
+               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 1, cv.LINE_AA)
+    cv.putText(frame1, f"STATUS: {PositionMarker}", (315, 30),
+               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 1, cv.LINE_AA)
     for contour in contours:
-
         (x, y, w, h) = cv.boundingRect(contour)
         if cv.contourArea(contour) > 10000:
             cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
