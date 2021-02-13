@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture(0)
+video = cv.VideoCapture("videos/m1.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -117,18 +117,18 @@ while video.isOpened():
 
             if going_left == True:
                 print(x + w)
-                if x > 150 and x < 170:
+                if x > 150 and x < 165:
                     print("GOING LEFT")
+                    person_counter += 1
+                    going_left = False
+
+            if going_right == True:
+                if x + w > 500 and x + w < 510:
+                    print("GOING RIGHT")
                     if person_counter <= 0:
                         person_counter = 0
                     else:
                         person_counter -= 1
-                        going_left = False
-
-            if going_right == True:
-                if x + w > 500 and x + w < 520:
-                    print("GOING RIGHT")
-                    person_counter += 1
                     going_right = False
 
             if counter % 3 == 0:
