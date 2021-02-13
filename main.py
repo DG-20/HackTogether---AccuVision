@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture("videos/m1.mp4")
+video = cv.VideoCapture("videos/mactualfinal.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -53,7 +53,6 @@ windowHeight = frame1.shape[0]
 print(windowWidth)
 print(windowHeight)
 
-
 previous_x = windowWidth/2
 
 
@@ -94,11 +93,11 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    #contourS = [0]
-    # contour = max(contours, key = cv.contourArea)
+
     cv.putText(frame1, f"Num: {person_counter}", (10, 30),
                cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
-    cv.putText(frame1,f"Status: {PositionMarker}",(330,30), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
+    cv.putText(frame1, f"Status: {PositionMarker}", (330, 30),
+               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
     for contour in contours:
 
         (x, y, w, h) = cv.boundingRect(contour)
@@ -118,13 +117,13 @@ while video.isOpened():
 
             if going_left == True:
                 print(x + w)
-                if (x > 150 and x < 160) or (x + w > 150 and x + w < 160):
+                if (x > 150 and x < 165):
                     print("GOING LEFT")
-                    person_counter += 1
+                    person_counter += 1         
                     going_left = False
 
             if going_right == True:
-                if x + w > windowWidth - 165 and x + w < windowWidth - 145:
+                if x + w > windowWidth - 165 and x + w < windowWidth - 160:
                     print("GOING RIGHT")
                     if person_counter <= 0:
                         person_counter = 0
@@ -134,73 +133,13 @@ while video.isOpened():
 
             if previous_x == x:
                 PositionMarker = "Stationary"
-            if cv.boundingRect(contour) == None:
-                PositionMarker = ""
 
             if counter % 3 == 0:
                 previous_x = x
 
-    # print(contourS)
     resize = cv.resize(frame1, (640, 480))
     cv.imshow("frame1", resize)
-    """
-    #contour = max(contours)
-    con = largestContour(contours)
-    print(con)
-    print("HI")
-    cons = findContour(contours, con)
-    cv.rectangle(frame1, (cons[0], cons[1]),
-                 (cons[0]+cons[2], cons[1]+cons[3]), (0, 255, 0), 3)
-    if cons[0] > 310 and cons[0] < 320:
-        if (counter % 2) == 1:
-            previous_x = cons[0]
-    if (counter % 2) == 0:
-        if cons[0] > 320:
-            going_right = True
-        if cons[0] >= 100 and cons[0] <= 105:
-            person_counter += 1
-    
-    #(x, y, w, h) = cv.boundingRect(cons)
 
-    for contour in contours:
-       
-        #going_right = 0
-        #going_left = 0
-        #if cv.contourArea(contour) < 20000:
-        #    continue
-        (x, y, w, h) = cv.boundingRect(contour)
-        #print(f"Previous x is: {previous_x}, x is: {x}")
-        #if cv.contourArea(contour) < 900:
-        #    continue
-        #print(cv.contourArea(contour))
-
-            # ADD FPS %3 == 0 (EVERY THIRD FRAME), DO PREVIOUS_X < X THEN INCREASE COUNTER ETC
-
-        if (w > 125 and h > 175) and (w < 700 and h < 800):
-            cv.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 3)
-        # CORRECT DIMENSIONS
-        # if x < 200 and x > 190:
-        #    person_counter += 1
-        # if (x > 280 and x < 290):
-        if (previous_x < x):
-            person_counter += 1
- #   if (x < 280):
-      #  if x < 270:
-          #  going_left = 1
-
-        # if (x < 590 and x > 580):
-        if previous_x > x:
-            if person_counter == 0:
-                person_counter = 0
-            elif person_counter > 0:
-                person_counter -= 1
-
-        previous_x = x
-       # if (x > 100 and x < 110 and going_left == 1):
-        # person_counter += 1
-    """
-    #cv.imshow("TEST", frame1)
-    # cv.imshow("TEST2", fram3)
     frame1 = frame2
     ret, frame2 = video.read()
 
