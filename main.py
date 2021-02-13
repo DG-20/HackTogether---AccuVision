@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture("videos/m1.mp4")
+video = cv.VideoCapture(0)
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -96,9 +96,9 @@ while video.isOpened():
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     #contourS = [0]
     # contour = max(contours, key = cv.contourArea)
-    cv.putText(frame1,f"Num: {person_counter}",(10,50), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
+    cv.putText(frame1, f"Num: {person_counter}", (10, 50),
+               cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv.LINE_AA)
     for contour in contours:
-        
 
         (x, y, w, h) = cv.boundingRect(contour)
         if cv.contourArea(contour) > 10000:
@@ -117,7 +117,7 @@ while video.isOpened():
 
             if going_left == True:
                 print(x + w)
-                if x > 150 and x < 165:
+                if (x > 150 and x < 160) or (x + w > 150 and x + w < 160):
                     print("GOING LEFT")
                     person_counter += 1
                     going_left = False
@@ -193,7 +193,7 @@ while video.isOpened():
        # if (x > 100 and x < 110 and going_left == 1):
         # person_counter += 1
     """
-    cv.imshow("TEST", frame1)
+    #cv.imshow("TEST", frame1)
     # cv.imshow("TEST2", fram3)
     frame1 = frame2
     ret, frame2 = video.read()
