@@ -8,7 +8,7 @@ import datetime
 import calendar
 
 start_time = tm.time()
-video = cv.VideoCapture("videos/mactualfinal.mp4")
+video = cv.VideoCapture("videos/finalTestVideo.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
