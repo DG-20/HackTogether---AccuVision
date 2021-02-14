@@ -15,13 +15,13 @@ app = dash.Dash(__name__)
 # Reading data
 df = pd.read_csv("data/test.csv")
 
-counter = 4
+counter = 'Live Person Counter'
 
 app.layout = html.Div(
     children = [
         html.H1(counter),
-        html.P("asdfasdf"),
-        html.A("HIHIHI", href="https://dash.plotly.com/dash-html-components/a"),
+        html.P("Please pick the day that you want to view data for using the Slider feature, stay safe!"),
+        #html.A("HIHIHI", href="https://dash.plotly.com/dash-html-components/a"),
         html.Div([
         dcc.Dropdown(
             id="daySelector",
