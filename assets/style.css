@@ -3,19 +3,23 @@ body
     background: rgb(117, 186, 231)
 }
 
-h1 {
+h1 
+{
     text-align: center;
 
 }
 
-p {
+p 
+{
     text-align: center;
 }
 
-h1 {
+h1 
+{
     font-size: 70px;
-  }
+}
 
-p {
+p 
+{
     font-size: 40px;
 }

@@ -19,6 +19,21 @@ df = pd.read_csv("data/test.csv")
 #Live Counter of most up-to-date Data
 counter = 'Live People Counter'
 
+currentDate = date.today()
+year = currentDate.year
+month = currentDate.month
+dayNumber = currentDate.day
+
+def dayGet(day, month, year):
+    daysINWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    #dayIndex is an object of datetime
+    dayInd = datetime.date(year, month, day)
+    # .weekday is a method of this object (returns a number)
+    dayofweek = daysINWeek[dayInd.weekday()]
+    return (dayofweek)
+
+day = dayGet(dayNumber, month, year)
+
 
 app.layout = html.Div(
     children = [
@@ -37,7 +52,7 @@ app.layout = html.Div(
                 {"label": "Friday", "value": "Friday"},
             ],
             multi=True,         #enables multiple graphs to be displayed
-            value="Saturday",   #default value
+            value= day,   #default value
         )]),
         html.Div([
          dcc.Graph(id='ourGraph')]) #output for the callback
