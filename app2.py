@@ -51,7 +51,7 @@ app.layout = html.Div(
                 {"label": "Thursday", "value": "Thursday"},
                 {"label": "Friday", "value": "Friday"},
             ],
-            multi=True,         #enables multiple graphs to be displayed
+            multi=False,         #enables multiple graphs to be displayed
             value= day,   #default value
         )]),
         html.Div([
@@ -65,7 +65,8 @@ app.layout = html.Div(
 )
 def update_graph(day):
     value = day
-    fig = px.line(df, x = "Time of Day", y =day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
+    fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
+    fig.update_yaxes(title_text='Number of People in Building')
     return fig
 
 # Running it
