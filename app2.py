@@ -82,9 +82,10 @@ def update_graph(day, week):
     if len(day) == 0:
         day = "None"
     if week == 1:
-        fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
+        fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Building at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
     if week == 2:
-        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Store at Different Times")
+        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Different at Different Times")
+    fig.update_layout(yaxis_title = "Number of People")
     fig.update_layout(legend_title="Day of Week")
     return fig
 
