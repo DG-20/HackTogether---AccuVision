@@ -138,7 +138,7 @@ while video.isOpened():
                 writer = csv.writer(data)
                 writer.writerow(row)
         else:
-            row = [currentTime, 0, None, None, None, None, None, None]
+            row = [currentTime, None, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter
             with open("data/week1.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
