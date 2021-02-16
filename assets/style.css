@@ -1,28 +1,29 @@
+@font-face
+{
+    font-family: Datacron;
+    src: url(Datacron.ttf);
+}
+
 body
 {
-    background: rgb(117, 186, 231)
+    background: rgb(24, 25, 26)
 }
 
 h1 
 {
+    font-family: Datacron;
     text-align: center;
-
-}
-
-p 
-{
-    text-align: center;
-}
-
-h1 
-{
     font-size: 70px;
+    color: #fff;
 }
 
 p 
 {
+    text-align: center;
     font-size: 40px;
+    color: #fff;
 }
+
 
 #ourSlider
 {
