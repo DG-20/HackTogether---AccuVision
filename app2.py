@@ -15,6 +15,7 @@ pio.templates.default = 'plotly_dark'
 # Starting the app
 app = dash.Dash(__name__)
 app.config.suppress_callback_exceptions = True
+app.title="dashboard"
 
 # Reading data from csv file
 df = pd.read_csv("data/test.csv")
@@ -32,6 +33,7 @@ app.layout = html.Div(
             html.H1(counter)   #display counter
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
+        html.Title("Dashboard"),
         html.Div([
         dcc.Dropdown(
             id="daySelector",    #id that will link dropdown menu to input for callback
