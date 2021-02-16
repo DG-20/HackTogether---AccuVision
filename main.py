@@ -6,6 +6,13 @@ import random
 from datetime import date
 import datetime
 from dayGetter import get_day
+import gspread as GS
+import numpy as np
+gc = GS.service_account(filename='creds.json') 
+
+sheet1 = gc.open('tutorial').sheet1
+
+
 
 start_time = tm.time()
 video = cv.VideoCapture("videos/finalTestVideo.mp4")
@@ -131,6 +138,8 @@ while video.isOpened():
                 #       "Thursday", "Friday", "Saturday", "Sunday"]
                 writer = csv.writer(file)
                 writer.writerow(row)
+                
+
 
             row = [currentTime, None, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter

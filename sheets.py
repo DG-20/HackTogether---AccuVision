@@ -1,16 +1,9 @@
 import gspread as GS
-import numpy as np
 gc = GS.service_account(filename='creds.json') 
 
-sheet1 = gc.open('tutorial').sheet1
+previousWeekData = open("data/test2.csv", 'r').read()
+currentWeekData = open("data/test1.csv", 'r').read()
 
-
-data = sheet1.get_all_records()
-
-print(data)
-
-headers = np.array["Time of Day", "Monday", "Tuesday", "Wednesday",
-                       "Thursday", "Friday", "Saturday", "Sunday"]
-
-sheet1.update('A1', headers.tolist())
+gc.import_csv('1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A', previousWeekData)
+gc.import_csv('1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A', currentWeekData)
 
