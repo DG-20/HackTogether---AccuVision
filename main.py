@@ -5,7 +5,7 @@ import time as tm
 import random
 from datetime import date
 import datetime
-import calendar
+from dayGetter import get_day
 
 start_time = tm.time()
 video = cv.VideoCapture("videos/finalTestVideo.mp4")
@@ -19,34 +19,6 @@ row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
 with open("data/week1.csv", 'a', newline='') as data:
     writer = csv.writer(data)
     writer.writerow(row)
-
-# These two functions provide the day of the week
-
-
-def get_day():
-    current_date = date.today()
-    year = current_date.year
-    month = current_date.month
-    day = current_date.day
-    dayOfWeek = dayGetter(day, month, year)
-    return dayOfWeek
-
-
-global dayNum
-
-
-def dayGetter(day, month, year):
-    days = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"]
-    # dayIndex is an object of datetime
-    dayIndex = datetime.date(year, month, day)
-    global dayNum
-    dayNum = dayIndex.weekday()
-    # .weekday is a method of this object (returns a number)
-    day_of_week = days[dayIndex.weekday()]
-    return (day_of_week)
-
-
-day = get_day()
 
 windowWidth = frame1.shape[1]
 windowHeight = frame1.shape[0]
@@ -79,7 +51,8 @@ while video.isOpened():
     cv.resize(frame1, (640, 480))
     going_left = False
     going_right = False
-    day = get_day()
+    dayTuple = get_day()
+    dayNum = dayTuple[1]
     counter += 1
     difference = cv.absdiff(frame1, frame2)
     cv.imshow("divy", difference)

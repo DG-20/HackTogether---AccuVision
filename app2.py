@@ -4,11 +4,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import time
-import datetime
 import plotly.express as px
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
-from datetime import date
+from dayGetter import get_day
 
 # Starting the app
 app = dash.Dash(__name__)
@@ -19,21 +18,7 @@ df = pd.read_csv("data/test.csv")
 #Live Counter of most up-to-date Data
 counter = 'Live People Counter'
 
-currentDate = date.today()
-year = currentDate.year
-month = currentDate.month
-dayNumber = currentDate.day
-
-def dayGet(day, month, year):
-    daysINWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    #dayIndex is an object of datetime
-    dayInd = datetime.date(year, month, day)
-    # .weekday is a method of this object (returns a number)
-    dayofweek = daysINWeek[dayInd.weekday()]
-    return (dayofweek)
-
-day = dayGet(dayNumber, month, year)
-
+day = get_day()[0]
 
 app.layout = html.Div(
     children = [
