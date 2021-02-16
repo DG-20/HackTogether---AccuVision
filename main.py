@@ -127,18 +127,18 @@ while video.isOpened():
             reader = csv.reader(file)
             lines = len(list(reader))
             if lines == 0:
-                row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
-                       "Thursday", "Friday", "Saturday", "Sunday"]
+                #row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
+                #       "Thursday", "Friday", "Saturday", "Sunday"]
                 writer = csv.writer(file)
                 writer.writerow(row)
 
-            row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
+            row = [currentTime, None, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter
             with open("data/week2.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
         else:
-            row = [currentTime, 0, 0, 0, 0, 0, 0, 0]
+            row = [currentTime, 0, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter
             with open("data/week1.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
