@@ -18,6 +18,7 @@ app.config.suppress_callback_exceptions = True
 
 # Reading data from csv file
 df = pd.read_csv("data/test.csv")
+df2 = pd.read_csv("data/test2.csv")
 
 #Live Counter of most up-to-date Data
 counter = 'Live People Counter'
@@ -26,7 +27,10 @@ day = get_day()[0]
 
 app.layout = html.Div(
     children = [
-        html.H1(counter),   #display counter
+        html.Div([
+            html.Div(id = "title"),
+            html.H1(counter)   #display counter
+        ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
         html.Div([
         dcc.Dropdown(
@@ -53,10 +57,10 @@ app.layout = html.Div(
 
         html.Div([
             dcc.Slider(
-                id = "ourSlider",
+                id = "weekGetter",
                 min = 1,
                 max = 2,
-                value = 2,
+                value = 1,
                 marks={
                     1: {'label': 'Previous Week', 'style': {'color': '#fff'}},
                     2: {'label': 'Current Week', 'style': {'color': '#fff'}}
@@ -68,14 +72,17 @@ app.layout = html.Div(
 
 @app.callback(
     Output('ourGraph', 'figure'),   #output changes to figure
-    Input('daySelector', 'value')   #input that is connected to the id and value
+    Input('daySelector', 'value'),   #input that is connected to the id and value
+    Input('weekGetter', 'value')
 )
-def update_graph(day):
+def update_graph(day, week):
     #value = day
     if len(day) == 0:
         day = "None"
-    fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
-    fig.update_yaxes(title_text='Number of People in Building')
+    if week == 1:
+        fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
+    if week == 2:
+        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Store at Different Times")
     fig.update_layout(legend_title="Day of Week")
     return fig
 

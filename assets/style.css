@@ -1,20 +1,25 @@
 @font-face
 {
-    font-family: Datacron;
-    src: url(Datacron.ttf);
+    font-family: Bariol;
+    src: url(regular.ttf);
 }
 
 body
 {
-    background: rgb(24, 25, 26)
+    background: #121212; /*rgb(24, 25, 26);*/
 }
 
 h1 
 {
-    font-family: Datacron;
+    color: white;
+    position: relative;
+    width: 100%;
+    font-family: Bariol;
     text-align: center;
-    font-size: 70px;
-    color: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: 4em;
+    z-index: 1;
 }
 
 p 
@@ -25,10 +30,11 @@ p
 }
 
 
-#ourSlider
+#weekGetter
 {
+    padding-top: 50px;
     width: 50vw;
-    height: 10px;
+    font-size: 20px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -37,7 +43,7 @@ p
 #daySelector .Select-placeholder 
 {
     color: rgb(255, 255, 255);
-    border-color: #fff;
+    border-color: #000;
 }
 
 .is-focused:not(.is-open) > .Select-control 
@@ -48,19 +54,24 @@ p
 
 #daySelector .Select--multi .Select-value 
 {
-    background-color: #fff;
-    color: #000;
-    border-color: #000;
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+    font-size: 20px;
 }
 
-.Select-control, .Select div, .is-open>.Select-control{
+.Select-control, .Select div, .is-open>.Select-control
+{
     color: white;
-    border-color: #fff;
+    font-size: 20px;
+    border-style: solid;
+    /*border-radius: 8px;*/
+    border-color: rgb(24, 25, 26);
     background-color: #000;
-  }
+}
 
 #daySelector .VirtualizedSelectFocusedOption 
 {
-   background-color: #000;
-   border-color: #000;
+   background-color: rgb(24, 25, 26);
+   border:black;
 }
