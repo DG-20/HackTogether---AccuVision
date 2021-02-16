@@ -41,13 +41,15 @@ app.layout = html.Div(
                 {"label": "Friday", "value": "Friday"}
             ],
             multi = True,         #enables multiple graphs to be displayed
+            style = {'background-color': '#000', 'color': '#000'},
             value = day,   #default value
             placeholder = "Select a Day",
             searchable = False,
-            clearable = False
+            clearable = False,
         )]),
         html.Div([
-         dcc.Graph(id='ourGraph')]), #output for the callback
+         dcc.Graph(id='ourGraph',
+         )]), #output for the callback
 
         html.Div([
             dcc.Slider(
@@ -56,8 +58,8 @@ app.layout = html.Div(
                 max = 2,
                 value = 2,
                 marks={
-                    1: {'label': 'Previous Week'},
-                    2: {'label': 'Current Week'}
+                    1: {'label': 'Previous Week', 'style': {'color': '#fff'}},
+                    2: {'label': 'Current Week', 'style': {'color': '#fff'}}
                 }
             )
         ])

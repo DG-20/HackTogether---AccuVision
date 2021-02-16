@@ -34,13 +34,33 @@ p
     margin-right: auto;
 }
 
+#daySelector .Select-placeholder 
+{
+    color: rgb(255, 255, 255);
+    border-color: #fff;
+}
+
+.is-focused:not(.is-open) > .Select-control 
+{
+    border-color: #fff;
+    box-shadow: 0 0 3px #fff;
+}
+
 #daySelector .Select--multi .Select-value 
 {
-    background-color: #7e2868;
-    color: #fff;
+    background-color: #fff;
+    color: #000;
+    border-color: #000;
 }
-  
+
+.Select-control, .Select div, .is-open>.Select-control{
+    color: white;
+    border-color: #fff;
+    background-color: #000;
+  }
+
 #daySelector .VirtualizedSelectFocusedOption 
 {
-   background-color: #7e2868;
+   background-color: #000;
+   border-color: #000;
 }
