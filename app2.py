@@ -18,7 +18,7 @@ app.config.suppress_callback_exceptions = True
 app.title="dashboard"
 
 # Reading data from csv file
-df = pd.read_csv("data/test.csv")
+df = pd.read_csv("data/test1.csv")
 df2 = pd.read_csv("data/test2.csv")
 
 #Live Counter of most up-to-date Data
