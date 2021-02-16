@@ -23,3 +23,12 @@ p
 {
     font-size: 40px;
 }
+
+#ourSlider
+{
+    width: 50vw;
+    height: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

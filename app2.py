@@ -4,10 +4,13 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import time
+import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 from dayGetter import get_day
+
+pio.templates.default = 'plotly_dark'
 
 # Starting the app
 app = dash.Dash(__name__)
@@ -39,6 +42,7 @@ app.layout = html.Div(
             ],
             multi = True,         #enables multiple graphs to be displayed
             value = day,   #default value
+            placeholder = "Select a Day"
         )]),
         html.Div([
          dcc.Graph(id='ourGraph')]), #output for the callback
@@ -71,4 +75,4 @@ def update_graph(day):
 
 # Running it
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)
