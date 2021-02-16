@@ -38,11 +38,13 @@ app.layout = html.Div(
                 {"label": "Tuesday", "value": "Tuesday"},
                 {"label": "Wednesday", "value": "Wednesday"},
                 {"label": "Thursday", "value": "Thursday"},
-                {"label": "Friday", "value": "Friday"},
+                {"label": "Friday", "value": "Friday"}
             ],
             multi = True,         #enables multiple graphs to be displayed
             value = day,   #default value
-            placeholder = "Select a Day"
+            placeholder = "Select a Day",
+            searchable = False,
+            clearable = False
         )]),
         html.Div([
          dcc.Graph(id='ourGraph')]), #output for the callback
@@ -68,6 +70,8 @@ app.layout = html.Div(
 )
 def update_graph(day):
     #value = day
+    if len(day) == 0:
+        day = "None"
     fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Store at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
     fig.update_yaxes(title_text='Number of People in Building')
     fig.update_layout(legend_title="Day of Week")
@@ -75,4 +79,4 @@ def update_graph(day):
 
 # Running it
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(debug=True)

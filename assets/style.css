@@ -33,3 +33,14 @@ p
     margin-left: auto;
     margin-right: auto;
 }
+
+#daySelector .Select--multi .Select-value 
+{
+    background-color: #7e2868;
+    color: #fff;
+}
+  
+#daySelector .VirtualizedSelectFocusedOption 
+{
+   background-color: #7e2868;
+}
