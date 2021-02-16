@@ -41,7 +41,20 @@ app.layout = html.Div(
             value = day,   #default value
         )]),
         html.Div([
-         dcc.Graph(id='ourGraph')]) #output for the callback
+         dcc.Graph(id='ourGraph')]), #output for the callback
+
+        html.Div([
+            dcc.Slider(
+                id = "ourSlider",
+                min = 1,
+                max = 2,
+                value = 2,
+                marks={
+                    1: {'label': 'Previous Week'},
+                    2: {'label': 'Current Week'}
+                }
+            )
+        ])
     ]
 )
 
