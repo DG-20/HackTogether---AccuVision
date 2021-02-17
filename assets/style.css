@@ -1,6 +1,6 @@
 @font-face
 {
-    font-family: Bariol;
+    font-family: Nebula;
     src: url(Nebula-Regular.otf);
 }
 
@@ -9,16 +9,24 @@ body
     background: #121212; /*rgb(24, 25, 26);*/
 }
 
+#title img
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    top: 0%;
+}
+
 h1 
 {
-    color: white;
+    color: rgb(199, 199, 199);
     position: relative;
     width: 100%;
-    font-family: Bariol;
+    font-family: Nebula;
     text-align: center;
     margin: 0;
     padding: 0;
-    font-size: 4em;
+    font-size: 5em;
     z-index: 1;
 }
 
@@ -30,7 +38,54 @@ p
 }
 
 
-#weekGetter
+.side_by_side 
+{
+    border-radius: 1px;
+    background-color: #010915;
+    margin: 1px;
+    padding: 2px;
+    position: relative;
+    box-shadow: 2px 2px 2px 2px #010915;
+}
+  
+ 
+.right_side 
+{
+   margin: 0 auto;
+   padding: 5px;
+   width: 80%;
+}
+
+.left_side
+{
+    margin: 0 auto;
+    padding: 5px;
+    width: 20%;
+    background-color: #121212;
+    border-radius: 50px;
+}
+  
+.side_by_side
+{
+    display: flex;
+    border-radius: 50px;
+}
+  
+#mainContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.text_area
+{
+    background-color: #000;
+    color: #000;
+    font-style: #fff;
+}
+
+
+
+/*#weekGetter
 {
     padding-top: 50px;
     width: 50vw;
@@ -38,7 +93,7 @@ p
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
+}*/
 
 #daySelector .Select-placeholder 
 {
