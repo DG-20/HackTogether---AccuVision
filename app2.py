@@ -30,7 +30,7 @@ app.layout = html.Div(
     children = [
         html.Div([
             html.Div(id = "title"),
-            html.H1(counter)   #display counter
+            html.H1("ACCUVISION")   #display counter
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
         html.Title("Dashboard"),
