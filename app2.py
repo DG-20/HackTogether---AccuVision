@@ -30,47 +30,63 @@ app.layout = html.Div(
     children = [
         html.Div([
             html.Div(id = "title"),
-            html.H1("ACCUVISION")   #display counter
+            html.H1(counter)   #display counter
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
         html.Title("Dashboard"),
         html.Div([
-        dcc.Dropdown(
-            id="daySelector",    #id that will link dropdown menu to input for callback
-            options=[            #creating labels and values for the labels that are linked to the csv file
-                {"label": "Saturday", "value": "Saturday"},
-                {"label": "Sunday", "value": "Sunday"},
-                {"label": "Monday", "value": "Monday"},
-                {"label": "Tuesday", "value": "Tuesday"},
-                {"label": "Wednesday", "value": "Wednesday"},
-                {"label": "Thursday", "value": "Thursday"},
-                {"label": "Friday", "value": "Friday"}
-            ],
-            multi = True,         #enables multiple graphs to be displayed
-            style = {'background-color': '#000', 'color': '#000'},
-            value = day,   #default value
-            placeholder = "Select a Day",
-            searchable = False,
-            clearable = False,
-        )]),
-        html.Div([
-         dcc.Graph(id='ourGraph',
-         )]), #output for the callback
+        dcc.Markdown('''#### Dash and Markdown
 
-        html.Div([
-            dcc.Slider(
-                id = "weekGetter",
-                min = 1,
-                max = 2,
-                value = 1,
-                marks={
-                    1: {'label': 'Previous Week', 'style': {'color': '#fff'}},
-                    2: {'label': 'Current Week', 'style': {'color': '#fff'}}
-                }
-            )
-        ])
-    ]
-)
+            Dash supports [Markdown](http://commonmark.org/help).
+
+            Markdown is a simple way to write and format text.
+            It includes a syntax for things like **bold text** and *italics*,
+            [links](http://commonmark.org/help), inline `code` snippets, lists,
+            quotes, and more.
+            '''.format(style = {'background-color': '#000', 'color': '#000', 'font-color': '#fff'})),
+        ], className = 'text_area'),
+        html.Div(children = [
+            html.Div([
+                dcc.Dropdown(
+                    id="daySelector",    #id that will link dropdown menu to input for callback
+                    options=[            #creating labels and values for the labels that are linked to the csv file
+                        {"label": "Saturday", "value": "Saturday"},
+                        {"label": "Sunday", "value": "Sunday"},
+                        {"label": "Monday", "value": "Monday"},
+                        {"label": "Tuesday", "value": "Tuesday"},
+                        {"label": "Wednesday", "value": "Wednesday"},
+                        {"label": "Thursday", "value": "Thursday"},
+                        {"label": "Friday", "value": "Friday"}
+                    ],
+                    multi = True,         #enables multiple graphs to be displayed
+                    style = {'background-color': '#000', 'color': '#000'},
+                    value = day,   #default value
+                    placeholder = "Select a Day",
+                    searchable = False,
+                    clearable = False,
+                    className = 'dropdown',
+                    ),
+                dcc.Slider(id = "weekGetter",
+                            min = 1,
+                            max = 2,
+                            value = 1,
+                            marks={
+                                1: {'label': 'Previous Week', 'style': {'color': '#fff'}},
+                                2: {'label': 'Current Week', 'style': {'color': '#fff'}},
+                            },
+                            className = 'slider',
+                ),
+            ], className = "left_side"),
+
+            html.Div([
+                dcc.Graph(id='ourGraph',
+                ), #output for the callback
+            ], className = "right_side"),
+        ], className = "side_by_side"),    
+], id= "mainContainer", style={"display": "flex", "flex-direction": "column"})
+
+
+
 
 @app.callback(
     Output('ourGraph', 'figure'),   #output changes to figure
