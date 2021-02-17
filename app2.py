@@ -15,7 +15,7 @@ pio.templates.default = 'plotly_dark'
 # Starting the app
 app = dash.Dash(__name__)
 app.config.suppress_callback_exceptions = True
-app.title="dashboard"
+app.title="Dashboard"
 
 # Reading data from csv file
 df = pd.read_csv("data/test1.csv")
