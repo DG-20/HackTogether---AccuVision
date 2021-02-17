@@ -1,6 +1,6 @@
 @font-face
 {
-    font-family: Bariol;
+    font-family: Nebula;
     src: url(Nebula-Regular.otf);
 }
 
@@ -14,7 +14,7 @@ h1
     color: white;
     position: relative;
     width: 100%;
-    font-family: Bariol;
+    font-family: Nebula;
     text-align: center;
     margin: 0;
     padding: 0;

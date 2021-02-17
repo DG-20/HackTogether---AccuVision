@@ -18,8 +18,8 @@ app.config.suppress_callback_exceptions = True
 app.title="Dashboard"
 
 # Reading data from csv file
-df = pd.read_csv("data/Walmart_Shawnessy/test1.csv")
-df2 = pd.read_csv("data/Walmart_Shawnessy/test2.csv")
+df = pd.read_csv("https://docs.google.com/spreadsheets/d/1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A/export?gid=1265674278&format=csv", index_col = None)
+df2 = pd.read_csv("https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=1515513450&format=csv",  index_col = None)
 
 #Live Counter of most up-to-date Data
 counter = 'ACCUVISION'
@@ -84,11 +84,11 @@ def update_graph(day, week):
     if week == 1:
         fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Building at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
     if week == 2:
-        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Different at Different Times")
+        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Building at Different Times")
     fig.update_layout(yaxis_title = "Number of People")
     fig.update_layout(legend_title="Day of Week")
     return fig
 
 # Running it
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug = True)
