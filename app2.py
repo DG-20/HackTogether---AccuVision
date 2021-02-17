@@ -22,7 +22,7 @@ df = pd.read_csv("data/Walmart_Shawnessy/test1.csv")
 df2 = pd.read_csv("data/Walmart_Shawnessy/test2.csv")
 
 #Live Counter of most up-to-date Data
-counter = 'Live People Counter'
+counter = 'ACCUVISION'
 
 day = get_day()[0]
 
@@ -30,7 +30,7 @@ app.layout = html.Div(
     children = [
         html.Div([
             html.Div(id = "title"),
-            html.H1(counter)   #display counter
+            html.H1("ACCUVISION")   #display counter
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
         html.Title("Dashboard"),

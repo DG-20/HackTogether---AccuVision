@@ -8,11 +8,10 @@ import datetime
 from dayGetter import get_day
 import gspread as GS
 import numpy as np
+
 gc = GS.service_account(filename='creds.json') 
-
-sheet1 = gc.open('tutorial').sheet1
-
-
+sheet1 = gc.open('week1').sheet1
+sheet2 = gc.open('week2').sheet2
 
 start_time = tm.time()
 video = cv.VideoCapture("videos/finalTestVideo.mp4")
@@ -138,20 +137,19 @@ while video.isOpened():
                 #       "Thursday", "Friday", "Saturday", "Sunday"]
                 writer = csv.writer(file)
                 writer.writerow(row)
-                
-
-
             row = [currentTime, None, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter
             with open("data/week2.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
+            gc.import_csv('1N4J66C5DeCKBCmroZciQfjj9bEl8FZDhtZor4bYL8Hc', week2.csv)
         else:
             row = [currentTime, None, None, None, None, None, None, None]
             row[dayNum + 1] = person_counter
             with open("data/week1.csv", 'a', newline='') as data:
                 writer = csv.writer(data)
                 writer.writerow(row)
+            gc.import_csv('1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY', week1.csv)
 
     if cv.waitKey(40) & 0xFF == ord('q'):
         break
