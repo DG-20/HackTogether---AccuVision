@@ -18,8 +18,8 @@ app.config.suppress_callback_exceptions = True
 app.title="Dashboard"
 
 # Reading data from csv file
-df = pd.read_csv("data/test1.csv")
-df2 = pd.read_csv("data/test2.csv")
+df = pd.read_csv("data/Walmart_Shawnessy/test1.csv")
+df2 = pd.read_csv("data/Walmart_Shawnessy/test2.csv")
 
 #Live Counter of most up-to-date Data
 counter = 'Live People Counter'
