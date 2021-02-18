@@ -8,13 +8,13 @@ from dayGetter import get_day
 import gspread as GS
 
 # Enables Google API linking to AccuVision
-gc = GS.service_account(filename='creds.json') 
+gc = GS.service_account(filename='creds.json')
 
 # Starting the time in order to check for time elapsed further down the code.
 start_time = tm.time()
 
 # Reads the sample video and splits into frames
-video = cv.VideoCapture("videos/finalTestVideo.mp4")
+video = cv.VideoCapture("videos/hacktogehtt4.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
@@ -61,7 +61,7 @@ while video.isOpened():
     dilated = cv.dilate(thresh, None, iterations=3)
     contours, _ = cv.findContours(
         dilated, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-        
+
     # Updating the position marker based on the motion detection using contours.
     if len(contours) < 1:
         PositionMarker = "NO MOTION"
@@ -72,8 +72,8 @@ while video.isOpened():
     cv.putText(frame1, f"STATUS: {PositionMarker}", (315, 30),
                cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 1, cv.LINE_AA)
 
-    # Algorithm for addition/subtraction of live counter based on positioning of bounding box. 
-    # In this configuration, going to the left counted as an increment in the counter and going to the right counted as a decrement in the counter. 
+    # Algorithm for addition/subtraction of live counter based on positioning of bounding box.
+    # In this configuration, going to the left counted as an increment in the counter and going to the right counted as a decrement in the counter.
     for contour in contours:
 
         # Obtain coordinates of bounding box if the bound area is greater than 10000 (can be customized based on configuration)
@@ -101,7 +101,7 @@ while video.isOpened():
             # Increment counter if going left and pass the left boundary condition.
             if going_left == True:
                 if (x > 150 and x < 165):
-                    person_counter += 1         
+                    person_counter += 1
                     going_left = False
 
             # Decrement counter if going right and pass the right boundary condition.
@@ -158,8 +158,9 @@ while video.isOpened():
 
             # This is utiizing the Google Drive API and uploading the CSV to a Google Sheets to be used by app.py.
             previousWeekData = open("data/week2.csv", 'r').read()
-            gc.import_csv('1N4J66C5DeCKBCmroZciQfjj9bEl8FZDhtZor4bYL8Hc', previousWeekData)
-        
+            gc.import_csv(
+                '1N4J66C5DeCKBCmroZciQfjj9bEl8FZDhtZor4bYL8Hc', previousWeekData)
+
             # If in the first week of run-time, use the week1.csv file.
         else:
             row = [currentTime, None, None, None, None, None, None, None]
@@ -170,7 +171,8 @@ while video.isOpened():
 
             # This is uploading the CSV to a Google Sheets for week 1.
             currentWeekData = open("data/week1.csv", 'r').read()
-            gc.import_csv('1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY', currentWeekData)
+            gc.import_csv(
+                '1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY', currentWeekData)
 
     # Quits the video feed with 'q'
     if cv.waitKey(40) & 0xFF == ord('q'):
