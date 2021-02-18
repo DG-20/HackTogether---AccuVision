@@ -43,17 +43,8 @@ app.layout = html.Div(
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
         html.Title("Dashboard"),
-        html.Div([
-        dcc.Markdown('''#### Dash and Markdown
-
-            Dash supports [Markdown](http://commonmark.org/help).
-
-            Markdown is a simple way to write and format text.
-            It includes a syntax for things like **bold text** and *italics*,
-            [links](http://commonmark.org/help), inline `code` snippets, lists,
-            quotes, and more.
-            '''.format(style = {'background-color': '#000', 'color': '#000', 'font-color': '#fff'})),
-        ], className = 'text_area'),
+        html.H4('   In these times of uncertainty during the COVID-19 pandemic, the necessity for limiting public contact is greater than ever. In order to assist you with doing so, AccuVision provides real-time data about the number of people within an establishment at any given point over the course of the current and past week. We hope AccuVision helps you stay safe in these unprecedented times.', title = 'Introduction to AccuVision',
+        className = 'text_area'),
         html.Div(children = [
             html.Div([
                 dcc.Dropdown(
@@ -63,7 +54,6 @@ app.layout = html.Div(
                         {"label": "Walmart Shawnessy", "value": "Walmart_Shawnessy"},
                         {"label": "YMCA Shawnessy", "value": "YMCA_Shawnessy"}
                     ],
-                    style = {'background-color': '#000', 'color': '#fff'},
                     placeholder = "Select a Building",
                     clearable = False,
                     className = 'dropdown',
@@ -82,12 +72,11 @@ app.layout = html.Div(
                         {"label": "Friday", "value": "Friday"}
                     ],
                     multi = True,         #enables multiple graphs to be displayed
-                    style = {'background-color': '#000', 'color': '#000'},
                     value = day,   #default value
                     placeholder = "Select a Day",
                     searchable = False,
                     clearable = True,
-                    className = 'dropdown',
+                    className = 'dropdown1',
                     ),
 
                 dcc.Slider(id = "weekGetter",
