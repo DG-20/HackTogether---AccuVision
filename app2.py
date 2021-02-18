@@ -28,6 +28,8 @@ WalShaw_Current = pd.read_csv("https://docs.google.com/spreadsheets/d/1F-fvele1E
 WalShaw_Previous = pd.read_csv("https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=688427654&format=csv",  index_col = None)
 CostcoHeritage_Current = pd.read_csv("https://docs.google.com/spreadsheets/d/1Fh37SZr6vFYi-1GGrdAsSrYB8Vv1VGhKWJUeyp981zA/export?gid=1224033525&format=csv", index_col = None)
 CostcoHeritage_Previous = pd.read_csv("https://docs.google.com/spreadsheets/d/1dB_NgzL0c5qBn1A3y2rPkRcBDTfSYofg6F0BuZ8eFsk/export?gid=583703077&format=csv", index_col = None)
+YMCAShaw_Previous = pd.read_csv("https://docs.google.com/spreadsheets/d/1agLC1TUQz2N_9vle5FXpVZ5lAieVDgidTVmqKw4JbZk/export?gid=1278973156&format=csv", index_col = None)
+YMCAShaw_Current = pd.read_csv("https://docs.google.com/spreadsheets/d/1SQOCXvnZUW74ES4R-37HorE3A2_-hnrxnvjq_A1fLK4/export?gid=1144356892&format=csv", index_col = None)
 
 #Live Counter of most up-to-date Data
 
@@ -125,6 +127,9 @@ def update_graph(day, week, building):
     if building == "Costco_Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
         sheetToReadFrom_Current = CostcoHeritage_Current
+    elif building == "YMCA_Shawnessy":
+        sheetToReadFrom_Previous = YMCAShaw_Previous
+        sheetToReadFrom_Current = YMCAShaw_Current
 
     if len(day) == 0:
         day = "None"
