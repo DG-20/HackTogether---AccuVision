@@ -15,16 +15,19 @@ pio.templates.default = 'plotly_dark'
 # Starting the app
 app = dash.Dash(__name__)
 app.config.suppress_callback_exceptions = True
-app.title="Dashboard"
-
+app.title="AccuVision"
+counter = 1
 bestTime = ""
 worstTime = ""
 averagePeople = ""
 bestDay = ""
+currentCount = ""
 
 # Reading data from csv file
-df = pd.read_csv("https://docs.google.com/spreadsheets/d/1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A/export?gid=1265674278&format=csv", index_col = None)
-df2 = pd.read_csv("https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=1515513450&format=csv",  index_col = None)
+WalShaw_Current = pd.read_csv("https://docs.google.com/spreadsheets/d/1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A/export?gid=1265674278&format=csv", index_col = None)
+WalShaw_Previous = pd.read_csv("https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=1515513450&format=csv",  index_col = None)
+CostcoHeritage_Current = pd.read_csv("https://docs.google.com/spreadsheets/d/1Fh37SZr6vFYi-1GGrdAsSrYB8Vv1VGhKWJUeyp981zA/export?gid=1224033525&format=csv", index_col = None)
+CostcoHeritage_Previous = pd.read_csv("https://docs.google.com/spreadsheets/d/1dB_NgzL0c5qBn1A3y2rPkRcBDTfSYofg6F0BuZ8eFsk/export?gid=583703077&format=csv", index_col = None)
 
 #Live Counter of most up-to-date Data
 
@@ -60,11 +63,11 @@ app.layout = html.Div(
                         {"label": "Walmart Shawnessy", "value": "Walmart_Shawnessy"},
                         {"label": "YMCA Shawnessy", "value": "YMCA_Shawnessy"}
                     ],
-                    style = {'background-color': '#000', 'color': '#000'},
+                    style = {'background-color': '#000', 'color': '#fff'},
                     placeholder = "Select a Building",
                     clearable = False,
                     className = 'dropdown',
-                    searchable = False
+                    searchable = False,
                 ),
 
                 dcc.Dropdown(
@@ -83,7 +86,7 @@ app.layout = html.Div(
                     value = day,   #default value
                     placeholder = "Select a Day",
                     searchable = False,
-                    clearable = False,
+                    clearable = True,
                     className = 'dropdown',
                     ),
 
@@ -105,7 +108,7 @@ app.layout = html.Div(
             ], className = "right_side"),
         ], className = "side_by_side"), 
     html.Div([
-        html.P(id = "generalInfo"),
+        html.P(id = "generalInfo", children = True)
     ])
     ],  
         id= "mainContainer", style={"display": "flex", "flex-direction": "column"})
@@ -113,26 +116,47 @@ app.layout = html.Div(
 @app.callback(
     Output('ourGraph', 'figure'),   #output changes to figure
     Input('daySelector', 'value'),   #input that is connected to the id and value
-    Input('weekGetter', 'value')
+    Input('weekGetter', 'value'),
+    Input('buildingSelector', 'value')
 )
-def update_graph(day, week):
+def update_graph(day, week, building):
+    sheetToReadFrom_Previous = WalShaw_Previous
+    sheetToReadFrom_Current = WalShaw_Current
+    if building == "Costco_Heritage":
+        sheetToReadFrom_Previous = CostcoHeritage_Previous
+        sheetToReadFrom_Current = CostcoHeritage_Current
+
     if len(day) == 0:
         day = "None"
     if week == 1:
-        fig = px.line(df, x = "Time of Day", y = day, title="Number of People in Building at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
+        fig = px.line(sheetToReadFrom_Previous, x = "Time of Day", y = day, title="Number of People in Building at Different Times") # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected
     if week == 2:
-        fig = px.line(df2, x = "Time of Day", y = day, title="Number of People in Building at Different Times")
+        fig = px.line(sheetToReadFrom_Current, x = "Time of Day", y = day, title="Number of People in Building at Different Times")
     fig.update_layout(yaxis_title = "Number of People")
     fig.update_layout(legend_title="Day of Week")
     return fig
 
-#@app.callback(
-#    Output('generalInfo', 'info'),
-#    Input('daySelector', 'value'),
-#    Input('buildingSelector', 'value')
-#)
-#def update_info(day, building):
-#    if len(day)
+
+@app.callback(
+    Output('generalInfo', 'children'),
+    Input('daySelector', 'value'),
+    Input('buildingSelector', 'value')
+)
+def update_info(day, building):
+    oneDay = True
+    if len(day) != 1:
+        oneDay = False
+    if isinstance(day, str) == True:
+        oneDay = True
+
+    #return f"{type(day)}"
+    if oneDay == False:
+        return "Select one day to display general information."
+    else:
+        return
+#    else:
+
+
 
 # Running it
 if __name__ == "__main__":
