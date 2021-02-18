@@ -139,7 +139,7 @@ app.layout = html.Div(
             html.P(id="generalInfo", children=True),
         ], className = 'left_side2'),
         html.Div([
-            html.H4('Select a range below using the slider to determine the day which has the least traffic in the specified time:', className = 'rangeText'),
+            html.H4('Select a range below using the slider to determine the day which has the least traffic in the specified time:', className = 'selectRangeText'),
             html.Div([
             html.H5('From:', title='Range (From)', className='from'),
             html.H5('To:', title='Range (To)', className='to'),
@@ -241,10 +241,7 @@ def update_info(day, building):
         #This returns a string which provides the user the day in the previous week which contained the least number of people in total.
         indexOfSuggestedDay = dayWithLeast(day, building, sheetToReadFrom_Previous)
         liveCounter = displayLiveCounter(day, building, sheetToReadFrom_Previous)
-        return f"""
-        Currently, there are {displayLiveCounter(day, building, sheetToReadFrom_Previous)} people in {building}. 
-        According to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.
-            \nEach current visitor in {building} has {buildingArea/liveCounter:.0f} m²/person space."""
+        return f"""Currently, there are {displayLiveCounter(day, building, sheetToReadFrom_Previous):.0f} people in {building}.\nAccording to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.\nEach current visitor in {building} has {buildingArea/liveCounter:.0f} m²/person space."""
 
 @app.callback(
     Output('predictBestDay', 'children'),
@@ -256,11 +253,8 @@ def predictiveDayUpdate(building, timeSelected):
     sheetToReadFrom_Previous = WalShaw_Previous
     if building == "Costco-Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
-        buildingArea = CostcoHeritage_Area
     elif building == "YMCA-Shawnessy":
         sheetToReadFrom_Previous = YMCAShaw_Previous
-        buildingArea = YMCAShaw_Area
-
     return f"""Based on your inputs, {daysOfWeek[predictiveRange(building, sheetToReadFrom_Previous, timeSelected)]} was the day 
                 last week in which there were the fewest number of people in {building}."""
 
@@ -342,4 +336,4 @@ def predictiveRange(building, sheetToReadFrom_Previous, timeSelected):
 
 # Running it
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

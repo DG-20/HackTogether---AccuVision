@@ -130,19 +130,17 @@ p
     color: #fff;
 }
  
-@g.g-title
+.rc-slider-mark-text, .rc-slider-mark-text-active
 {
-    gtitle.style
-    {
-        font-family: Nebula;
-    }
+    color: rgb(199, 199, 199);
+    font-family: Archive;
 }
- 
+
 .slider
 {
     width: 55%;
     margin: auto;
-    font-family: Nebula;
+    font-family: Archive;
     padding: 100px;
 }
  
@@ -159,35 +157,46 @@ p
 {
     margin: 0 auto;
     padding: 15px;
-    width: 20%;
+    width: 19%;
     background-color: #121212;
     border-radius: 50px;
     text-align: center;
-    font-size: 12px;
 }
  
 #generalInfo
 {
-    font-size: 12px;
+    font-size: 17px;
 }
- 
+
 .from
 {
-    text-align: left;
     color: rgb(199, 199, 199);
+    font-family: Archive;
+}
+
+
+.FromToTitle
+{
+    display: flex;
+    justify-content:space-between;
 }
  
 .to
 {
-    text-align: right;
     color: rgb(199, 199, 199);
+    font-family: Archive;
 }
  
-h5{
+.selectRangeText
+{
+    padding: 30px;
+    font-size: 17px;
+}
+/*h5{
     position: relative;
     margin: auto;
     font-family: Archive;
-}
+}*/
  
 h4{
     margin: auto;
@@ -241,9 +250,12 @@ h4{
  
 .text_area
 {
+    margin: auto;
+    width: 80%;
     background-color: transparent;
     color: rgb(199, 199, 199);
     font-family: Archive;
+    font-size: 17px;
 }
  
 #weekGetter
@@ -285,7 +297,7 @@ h4{
     color: #fff;
     border-color: rgb(125, 70, 159);
     font-size: 15px;
-    font-family: Nebula;
+    font-family: Archive;
     margin: inline-block;
 }
  
@@ -295,13 +307,8 @@ h4{
     color: #fff;
     border-color: rgb(125, 70, 159);
     font-size: 15px;
-    font-family: Nebula;
+    font-family: Archive;
     margin: inline-block;
-}
- 
-.FromToTitle
-{
-    display: flex;
 }
  
  
@@ -313,7 +320,7 @@ h4{
     /*border-radius: 8px;*/
     border-color: rgb(24, 25, 26);
     background-color: #000;
-    font-family: Nebula;
+    font-family: Archive;
     margin: inline-block;
 }
  
