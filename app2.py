@@ -16,10 +16,7 @@ pio.templates.default = 'plotly_dark'
 app = dash.Dash(__name__)
 app.config.suppress_callback_exceptions = True
 app.title="AccuVision"
-counter = 1
 bestTime = ""
-worstTime = ""
-averagePeople = ""
 bestDay = ""
 currentCount = ""
 
@@ -39,7 +36,7 @@ app.layout = html.Div(
     children = [
         html.Div([
             html.Div(id = "title"),
-            html.Img(src = "assets/Accuvision_Logo_v2.png", height = "70", width = "211.801802"),   #display counter
+            html.Img(src = "assets/Accuvision_Logo_v3.png", height = "70", width = "220.925"),   #display counter
             html.H1("AccuVision")
 
         ]),
@@ -142,12 +139,10 @@ def update_info(day, building):
         oneDay = False
     if isinstance(day, str) == True:
         oneDay = True
-
-    #return f"{type(day)}"
     if oneDay == False:
-        return "Select one day to display general information."
+        return "Select a day to display general information about it."
     else:
-        return
+        
 #    else:
 
 
