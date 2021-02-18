@@ -33,6 +33,9 @@ YMCAShaw_Previous = pd.read_csv(
     "https://docs.google.com/spreadsheets/d/1agLC1TUQz2N_9vle5FXpVZ5lAieVDgidTVmqKw4JbZk/export?gid=1278973156&format=csv", index_col=None)
 YMCAShaw_Current = pd.read_csv(
     "https://docs.google.com/spreadsheets/d/1SQOCXvnZUW74ES4R-37HorE3A2_-hnrxnvjq_A1fLK4/export?gid=1144356892&format=csv", index_col=None)
+week1 = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY/export?format=csv", index_col=None
+)
 
 # Live Counter of most up-to-date Data
 
@@ -58,15 +61,16 @@ app.layout = html.Div(
                 dcc.Dropdown(
                     id="buildingSelector",
                     options=[
-                        {"label": "Costco Heritage", "value": "Costco_Heritage"},
+                        {"label": "Costco Heritage", "value": "Costco-Heritage"},
                         {"label": "Walmart Shawnessy",
-                            "value": "Walmart_Shawnessy"},
-                        {"label": "YMCA Shawnessy", "value": "YMCA_Shawnessy"}
+                            "value": "Walmart-Shawnessy"},
+                        {"label": "YMCA Shawnessy", "value": "YMCA-Shawnessy"}
                     ],
                     placeholder="Select a Building",
                     clearable=False,
                     className='dropdown',
                     searchable=False,
+                    value = "Walmart-Shawnessy"
                 ),
 
                 dcc.Dropdown(
@@ -122,10 +126,10 @@ app.layout = html.Div(
 def update_graph(day, week, building):
     sheetToReadFrom_Previous = WalShaw_Previous
     sheetToReadFrom_Current = WalShaw_Current
-    if building == "Costco_Heritage":
+    if building == "Costco-Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
         sheetToReadFrom_Current = CostcoHeritage_Current
-    elif building == "YMCA_Shawnessy":
+    elif building == "YMCA-Shawnessy":
         sheetToReadFrom_Previous = YMCAShaw_Previous
         sheetToReadFrom_Current = YMCAShaw_Current
 
@@ -149,6 +153,14 @@ def update_graph(day, week, building):
     Input('buildingSelector', 'value')
 )
 def update_info(day, building):
+    daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    #Determining which Google Sheets to read from based on the input of the building
+    #With Walmart-Shawnessy as the current default.
+    sheetToReadFrom_Previous = week1#WalShaw_Previous
+    if building == "Costco-Heritage":
+        sheetToReadFrom_Previous = CostcoHeritage_Previous
+    elif building == "YMCA-Shawnessy":
+        sheetToReadFrom_Previous = YMCAShaw_Previous
     oneDay = True
     if len(day) != 1:
         oneDay = False
@@ -157,16 +169,14 @@ def update_info(day, building):
     if oneDay == False:
         return "Select a day to display general information about it."
     else:
-        leastpeople = besDay(day, building)
-        return f"The best day to go is:, with {leastpeople} people"
+        #This returns a string which provides the user the day in the previous week which contained the least number of people in total.
+        indexOfSuggestedDay = dayWithLeast(day, building, sheetToReadFrom_Previous)
+        return f"""
+        According to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.
+                    \nThis is {displayLiveCounter(day, building, sheetToReadFrom_Previous)}."""
 
 
-def besDay(day, building):
-    sheetToReadFrom_Previous = WalShaw_Previous
-    if building == "Costco_Heritage":
-        sheetToReadFrom_Previous = CostcoHeritage_Previous
-    elif building == "YMCA_Shawnessy":
-        sheetToReadFrom_Previous = YMCAShaw_Previous
+def dayWithLeast(day, building, sheetToReadFrom_Previous):
     prevmon = sheetToReadFrom_Previous['Monday'].sum()
     prevtue = sheetToReadFrom_Previous['Tuesday'].sum()
     prevwed = sheetToReadFrom_Previous['Wednesday'].sum()
@@ -177,6 +187,29 @@ def besDay(day, building):
     bigday = (prevmon, prevtue, prevwed, prevthu, prevfri, prevsat, prevsun)
     dayIndex = bigday.index(min(bigday))
     return dayIndex
+
+def displayLiveCounter(day, building, sheetToReadFrom_Previous):
+    #Finding the total number of lines so as to read the most recent counter value
+    lastLine = len(sheetToReadFrom_Previous)
+
+    #Based on the day, get the column number to read from a specific cell
+    if day == "Monday":
+        dayIndex = 1
+    elif day == "Tuesday":
+        dayIndex = 2
+    elif day == "Wednesday":
+        dayIndex = 3
+    elif day == "Thursday":
+        dayIndex = 4
+    elif day == "Friday":
+        dayIndex = 5
+    elif day == "Saturday":
+        dayIndex = 6
+    elif day == "Sunday":
+        dayIndex = 7
+
+    #Returning the most recent counter value
+    return sheetToReadFrom_Previous.iloc[lastLine - 1, dayIndex]
 
 
 # Running it
