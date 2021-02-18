@@ -48,6 +48,8 @@ YMCAShaw_Area = 6028
 # Using dayGetter.py to obtain the day of the week.
 day = get_day()[0]
 
+daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 # This is where the HTML5 is incorporated through the .layout backbone of plotly.
 app.layout = html.Div(
     children=[
@@ -83,7 +85,7 @@ app.layout = html.Div(
                     className='dropdown',
                     searchable=False,
                     # Default selected establishment in this code is YMCA-Shawnessy (customizable).
-                    value = "YMCA-Shawnessy"
+                    value = "Walmart-Shawnessy"
                 ),
 
                 # Dropdown to select the day of the week as another required filter.
@@ -137,6 +139,7 @@ app.layout = html.Div(
             html.P(id="generalInfo", children=True),
         ], className = 'left_side2'),
         html.Div([
+            html.H4('Select a range below using the slider to determine the day which has the least traffic in the specified time:', className = 'rangeText'),
             html.Div([
             html.H5('From:', title='Range (From)', className='from'),
             html.H5('To:', title='Range (To)', className='to'),
@@ -145,6 +148,7 @@ app.layout = html.Div(
             min = 6,
             max = 23,
             value=[6, 23],
+            id = "predictiveDay",
             marks={
                 6: {'label': '6:00',},
                 7: {'label': '7:00',},
@@ -166,7 +170,7 @@ app.layout = html.Div(
                 23: {'label': '23:00',},
                 },
             ),
-            html.H4('Enter a range Above in the slider using a 24-hour clock time to find the best day to go', className = 'rangeText'),
+            html.P(id = 'predictBestDay', children = True)
         ], className = "right_side2"),
         ], className = 'side_by_side2'),
 
@@ -216,11 +220,10 @@ def update_graph(day, week, building):
     Input('buildingSelector', 'value')
 )
 def update_info(day, building):
-    daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     buildingArea = WalShaw_Area
     #Determining which Google Sheets to read from based on the input of the building
     #With Walmart-Shawnessy as the current default.
-    sheetToReadFrom_Previous = YMCAShaw_Previous                  #WalShaw_Previous
+    sheetToReadFrom_Previous = WalShaw_Previous
     if building == "Costco-Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
         buildingArea = CostcoHeritage_Area
@@ -239,10 +242,27 @@ def update_info(day, building):
         indexOfSuggestedDay = dayWithLeast(day, building, sheetToReadFrom_Previous)
         liveCounter = displayLiveCounter(day, building, sheetToReadFrom_Previous)
         return f"""
+        Currently, there are {displayLiveCounter(day, building, sheetToReadFrom_Previous)} people in {building}. 
         According to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.
-            \nThis is {displayLiveCounter(day, building, sheetToReadFrom_Previous)}. The live visitor per building area for {building}
-            is: {buildingArea/liveCounter:.0f} m²/people."""
+            \nEach current visitor in {building} has {buildingArea/liveCounter:.0f} m²/person space."""
 
+@app.callback(
+    Output('predictBestDay', 'children'),
+    Input('buildingSelector', 'value'),
+    Input('predictiveDay', 'value')
+)
+def predictiveDayUpdate(building, timeSelected):
+    timeSelected = [f"{timeSelected[0]}:00", f"{timeSelected[1]}:00"]
+    sheetToReadFrom_Previous = WalShaw_Previous
+    if building == "Costco-Heritage":
+        sheetToReadFrom_Previous = CostcoHeritage_Previous
+        buildingArea = CostcoHeritage_Area
+    elif building == "YMCA-Shawnessy":
+        sheetToReadFrom_Previous = YMCAShaw_Previous
+        buildingArea = YMCAShaw_Area
+
+    return f"""Based on your inputs, {daysOfWeek[predictiveRange(building, sheetToReadFrom_Previous, timeSelected)]} was the day 
+                last week in which there were the fewest number of people in {building}."""
 
 def dayWithLeast(day, building, sheetToReadFrom_Previous):
     prevmon = sheetToReadFrom_Previous['Monday'].sum()
@@ -280,40 +300,44 @@ def displayLiveCounter(day, building, sheetToReadFrom_Previous):
     #Returning the most recent counter value
     return sheetToReadFrom_Previous.iloc[1046 - 1, dayIndex]
 
-def predictiveRange(day, building, sheetToReadFrom_Previous):
-    input1="{x}".format(x="10:00")
-    input2="{y}".format(y="13:30")
-    pair=[input1,input2]
+def predictiveRange(building, sheetToReadFrom_Previous, timeSelected):
+    input1="{x}".format(x=timeSelected[0])
+    input2="{y}".format(y=timeSelected[1])
 
     prevmonT = pd.DataFrame(sheetToReadFrom_Previous['Monday'])
-    prevmonT.loc[input1,input2]
-    prevmonT.sum()
+    prevmonT.loc[input1:input2]
+    a = prevmonT.sum()
 
     prevtueT = pd.DataFrame(sheetToReadFrom_Previous['Tuesday'])
-    prevtueT.loc[input1,input2]
-    prevtueT.sum()
+    prevtueT.loc[input1:input2]
+    b = prevtueT.sum()
 
     prevwedT = pd.DataFrame(sheetToReadFrom_Previous['Wednesday'])
-    prevwedT.loc[input1,input2]
-    prevwedT.sum()
+    prevwedT.loc[input1:input2]
+    c = prevwedT.sum()
 
     prevthuT = pd.DataFrame(sheetToReadFrom_Previous['Thursday'])
-    prevthuT.loc[input1,input2]
-    prevthuT.sum()
+    prevthuT.loc[input1:input2]
+    d = prevthuT.sum()
 
     prevfriT = pd.DataFrame(sheetToReadFrom_Previous['Friday'])
-    prevfriT.loc[input1,input2]
-    prevfriT.sum()
+    prevfriT.loc[input1:input2]
+    e = prevfriT.sum()
 
     prevsatT = pd.DataFrame(sheetToReadFrom_Previous['Saturday'])
-    prevsatT.loc[input1,input2]
-    prevsatT.sum()
+    prevsatT.loc[input1:input2]
+    f = prevsatT.sum()
 
-    prevsunT = pd.DataFrames(heetToReadFrom_Previous['Sunday'])
-    prevsunT.loc[input1,input2]
-    prevsunT.sum()
+    prevsunT = pd.DataFrame(sheetToReadFrom_Previous['Sunday'])
+    prevsunT.loc[input1:input2]
+    g = prevsunT.sum()
 
-    bestOption = min(prevmonT, prevtueT, prevwedT, prevthuT, prevfriT, prevsatT, prevsunT)
+    bestOptions = (float(a.to_string(index = False)),float(b.to_string(index = False)),
+                    float(c.to_string(index = False)),float(d.to_string(index = False)),
+                        float(e.to_string(index = False)),float(f.to_string(index = False)),float(g.to_string(index = False)))
+
+    bestOption = bestOptions.index(min(bestOptions))
+
     return bestOption
 
 # Running it
