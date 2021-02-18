@@ -3,12 +3,24 @@
     font-family: Nebula;
     src: url(Nebula-Regular.otf);
 }
-
+ 
+@font-face
+{
+    font-family: Bariol;
+    src: url(bariol.ttf);
+}
+ 
+@font-face
+{
+    font-family: Archive;
+    src: url(archive.otf);
+}
+ 
 body
 {
     background: #121212; /*rgb(24, 25, 26);*/
 }
-
+ 
 #title img
 {
     display: block;
@@ -16,7 +28,7 @@ body
     margin-right: auto;
     top: 0%;
 }
-
+ 
 h1 
 {
     color: rgb(199, 199, 199);
@@ -29,62 +41,144 @@ h1
     font-size: 5em;
     z-index: 1;
 }
-
+ 
 p 
 {
     text-align: center;
-    font-size: 40px;
-    color: #fff;
+    font-size: 25px;
+    color: rgb(199, 199, 199);
+    font-family: Archive;
 }
-
-
-.side_by_side 
+ 
+.rc-slider-track 
 {
-    border-radius: 1px;
-    background-color: #010915;
-    margin: 1px;
-    padding: 2px;
-    position: relative;
-    box-shadow: 2px 2px 2px 2px #010915;
+ 
+    background-color:rgb(125, 70, 159);
 }
-  
+ 
+.rc-slider-dot-active {
+    border-color: rgb(125, 70, 159);
+}
+ 
+.rc-slider-dot-active {
+    border-color: rgb(125, 70, 159);
+}
+ 
+.rc-slider-handle {
+    border: solid 2px rgb(125, 70, 159);
+}
+ 
+.rc-slider-handle:focus 
+{
+    border-color: rgb(125, 70, 159);
+    box-shadow: 0 0 0 5px rgb(160, 96, 201);
+    outline: none;
+}
+ 
  
 .right_side 
 {
    margin: 0 auto;
    padding: 5px;
    width: 80%;
+   border-radius: 50px;
+   border-color: violet;
 }
-
+ 
+.modebar-btn--logo
+{
+    right: 300px;
+}
+ 
+ 
+.rc-slider-mark-text
+{
+    font-size: 14px;
+}
+ 
+.dropdown
+{
+    padding: 5px;
+    margin: auto;
+}
+ 
+.dropdown1
+{
+    padding: 5px;
+    margin: auto;
+}
+ 
+.buildingSelector
+{
+    padding: 5px;
+    margin: auto;
+}
+ 
+.has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label 
+{
+    color: #fff;
+}
+ 
+@g.g-title
+{
+    gtitle.style
+    {
+        font-family: Nebula;
+    }
+}
+ 
+.slider
+{
+    width: 55%;
+    margin: auto;
+    font-family: Nebula;
+}
+ 
 .left_side
 {
     margin: 0 auto;
-    padding: 5px;
+    padding: 15px;
     width: 20%;
     background-color: #121212;
     border-radius: 50px;
 }
+ 
+.main-svg
+{
+    border-radius: 50px;
+    border-color: violet;
+}
   
+.modebar-container
+{
+    right: 2%;
+}
+ 
 .side_by_side
 {
     display: flex;
     border-radius: 50px;
+    color: rgb(125, 70, 159);
+    background-color: rgb(125, 70, 159);
+    padding: 5px;
+    /*rgb(125, 70, 159)*/
 }
+ 
   
-#mainContainer {
+#mainContainer 
+{
     display: flex;
     flex-direction: column;
 }
-
+ 
 .text_area
 {
-    background-color: #000;
-    color: #000;
-    font-style: #fff;
+    background-color: transparent;
+    color: rgb(199, 199, 199);
+    font-family: Archive;
 }
-
-
-
+ 
+ 
 /*#weekGetter
 {
     padding-top: 50px;
@@ -94,38 +188,66 @@ p
     margin-left: auto;
     margin-right: auto;
 }*/
-
+ 
 #daySelector .Select-placeholder 
 {
     color: rgb(255, 255, 255);
     border-color: #000;
 }
-
+ 
+#buildingSlector .Select-placeholder 
+{
+    color: rgb(255, 255, 255);
+    border-color: #000;
+}
+ 
 .is-focused:not(.is-open) > .Select-control 
 {
     border-color: #fff;
     box-shadow: 0 0 3px #fff;
 }
-
+ 
 #daySelector .Select--multi .Select-value 
 {
     background-color: #000;
     color: #fff;
-    border-color: #b689ff;
-    font-size: 20px;
+    border-color: rgb(125, 70, 159);
+    font-size: 15px;
+    font-family: Nebula;
+    margin: inline-block;
 }
-
+ 
+#buildingSelector .Select-value 
+{
+    background-color: #000;
+    color: #fff;
+    border-color: rgb(125, 70, 159);
+    font-size: 15px;
+    font-family: Nebula;
+    margin: inline-block;
+}
+ 
+ 
+ 
 .Select-control, .Select div, .is-open>.Select-control
 {
     color: white;
-    font-size: 20px;
+    font-size: 15px;
     border-style: solid;
     /*border-radius: 8px;*/
     border-color: rgb(24, 25, 26);
     background-color: #000;
+    font-family: Nebula;
+    margin: inline-block;
 }
-
+ 
 #daySelector .VirtualizedSelectFocusedOption 
+{
+   background-color: rgb(24, 25, 26);
+   border:black;
+}
+ 
+#buildingSelector .VirtualizedSelectFocusedOption 
 {
    background-color: rgb(24, 25, 26);
    border:black;
