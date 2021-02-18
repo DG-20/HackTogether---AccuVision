@@ -1,3 +1,5 @@
+
+ 
 @font-face
 {
     font-family: Nebula;
@@ -85,6 +87,15 @@ p
    border-color: violet;
 }
  
+.right_side2 
+{
+   margin: 0 auto;
+   padding: 5px;
+   width: 80%;
+   border-radius: 50px;
+   border-color: violet;
+}
+ 
 .modebar-btn--logo
 {
     right: 300px;
@@ -98,13 +109,13 @@ p
  
 .dropdown
 {
-    padding: 5px;
+    padding: 15px;
     margin: auto;
 }
  
 .dropdown1
 {
-    padding: 5px;
+    padding: 25px;
     margin: auto;
 }
  
@@ -132,6 +143,7 @@ p
     width: 55%;
     margin: auto;
     font-family: Nebula;
+    padding: 100px;
 }
  
 .left_side
@@ -141,6 +153,52 @@ p
     width: 20%;
     background-color: #121212;
     border-radius: 50px;
+}
+ 
+.left_side2
+{
+    margin: 0 auto;
+    padding: 15px;
+    width: 20%;
+    background-color: #121212;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 12px;
+}
+ 
+#generalInfo
+{
+    font-size: 12px;
+}
+ 
+.from
+{
+    text-align: left;
+    color: rgb(199, 199, 199);
+}
+ 
+.to
+{
+    text-align: right;
+    color: rgb(199, 199, 199);
+}
+ 
+h5{
+    position: relative;
+    margin: auto;
+    font-family: Archive;
+}
+ 
+h4{
+    margin: auto;
+    text-align: center;
+    font-family: Archive;
+    color: rgb(199, 199, 199);
+}
+ 
+.rangeText
+{
+    margin: auto;
 }
  
 .main-svg
@@ -164,6 +222,16 @@ p
     /*rgb(125, 70, 159)*/
 }
  
+.side_by_side2
+{
+    display: flex;
+    border-radius: 50px;
+    color: rgb(125, 70, 159);
+    background-color: rgb(0, 0, 0);
+    padding: 5px;
+    /*rgb(125, 70, 159)*/
+}
+ 
   
 #mainContainer 
 {
@@ -178,6 +246,10 @@ p
     font-family: Archive;
 }
  
+#weekGetter
+{
+    padding: 10px 25px 25px;
+}
  
 /*#weekGetter
 {
@@ -227,6 +299,10 @@ p
     margin: inline-block;
 }
  
+.FromToTitle
+{
+    display: flex;
+}
  
  
 .Select-control, .Select div, .is-open>.Select-control
@@ -252,3 +328,4 @@ p
    background-color: rgb(24, 25, 26);
    border:black;
 }
+ 

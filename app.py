@@ -42,7 +42,7 @@ week1 = pd.read_csv(
 
 # Approximate areas of buildings obtained through Google Maps measuring app.
 WalShaw_Area = 14519
-CostcoShaw_Area = 13576
+CostcoHeritage_Area = 13576
 YMCAShaw_Area = 6028
 
 # Using dayGetter.py to obtain the day of the week.
@@ -59,10 +59,6 @@ app.layout = html.Div(
             html.H1("AccuVision")
 
         ]),
-        # short message
-        html.P(
-            "Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),
-
         #Introductory message.
         html.H4("""     In these times of uncertainty during the COVID-19 pandemic, the necessity for limiting public contact is greater than ever. 
                     In order to assist you with doing so, AccuVision provides real-time data about the number of people within an establishment at 
@@ -136,9 +132,44 @@ app.layout = html.Div(
         ], className="side_by_side"),
 
         # The div element which contains the general information displayed based on the filters selected
+        html.Div(children = [
         html.Div([
-            html.P(id="generalInfo", children=True)
-        ])
+            html.P(id="generalInfo", children=True),
+        ], className = 'left_side2'),
+        html.Div([
+            html.Div([
+            html.H5('From:', title='Range (From)', className='from'),
+            html.H5('To:', title='Range (To)', className='to'),
+            ], className = 'FromToTitle'),
+            dcc.RangeSlider(
+            min = 6,
+            max = 23,
+            value=[6, 23],
+            marks={
+                6: {'label': '6:00',},
+                7: {'label': '7:00',},
+                8: {'label': '8:00',},
+                9: {'label': '9:00',},
+                10: {'label': '10:00',},
+                11: {'label': '11:00',},
+                12: {'label': '12:00',},
+                13: {'label': '13:00',},
+                14: {'label': '14:00',},
+                15: {'label': '15:00',},
+                16: {'label': '16:00',},
+                17: {'label': '17:00',},
+                18: {'label': '18:00',},
+                19: {'label': '19:00',},
+                20: {'label': '20:00',},
+                21: {'label': '21:00',},
+                22: {'label': '22:00',},
+                23: {'label': '23:00',},
+                },
+            ),
+            html.H4('Enter a range Above in the slider using a 24-hour clock time to find the best day to go', className = 'rangeText'),
+        ], className = "right_side2"),
+        ], className = 'side_by_side2'),
+
     ],
     # Added styling to be able to display side by side for a better user experience.
     id="mainContainer", style={"display": "flex", "flex-direction": "column"})
@@ -186,13 +217,16 @@ def update_graph(day, week, building):
 )
 def update_info(day, building):
     daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    buildingArea = WalShaw_Area
     #Determining which Google Sheets to read from based on the input of the building
     #With Walmart-Shawnessy as the current default.
     sheetToReadFrom_Previous = YMCAShaw_Previous                  #WalShaw_Previous
     if building == "Costco-Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
+        buildingArea = CostcoHeritage_Area
     elif building == "YMCA-Shawnessy":
         sheetToReadFrom_Previous = YMCAShaw_Previous
+        buildingArea = YMCAShaw_Area
     oneDay = True
     if len(day) != 1:
         oneDay = False
@@ -203,9 +237,11 @@ def update_info(day, building):
     else:
         #This returns a string which provides the user the day in the previous week which contained the least number of people in total.
         indexOfSuggestedDay = dayWithLeast(day, building, sheetToReadFrom_Previous)
+        liveCounter = displayLiveCounter(day, building, sheetToReadFrom_Previous)
         return f"""
         According to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.
-                    \nThis is {displayLiveCounter(day, building, sheetToReadFrom_Previous)}."""
+            \nThis is {displayLiveCounter(day, building, sheetToReadFrom_Previous)}. The live visitor per building area for {building}
+            is: {buildingArea/liveCounter:.0f} m²/people."""
 
 
 def dayWithLeast(day, building, sheetToReadFrom_Previous):
