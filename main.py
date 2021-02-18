@@ -1,5 +1,4 @@
 import cv2 as cv
-import numpy as np
 import csv
 import time as tm
 import random
@@ -7,7 +6,6 @@ from datetime import date
 import datetime
 from dayGetter import get_day
 import gspread as GS
-import numpy as np
 
 gc = GS.service_account(filename='creds.json') 
 

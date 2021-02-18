@@ -17,12 +17,16 @@ app = dash.Dash(__name__)
 app.config.suppress_callback_exceptions = True
 app.title="Dashboard"
 
+bestTime = ""
+worstTime = ""
+averagePeople = ""
+bestDay = ""
+
 # Reading data from csv file
 df = pd.read_csv("https://docs.google.com/spreadsheets/d/1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A/export?gid=1265674278&format=csv", index_col = None)
 df2 = pd.read_csv("https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=1515513450&format=csv",  index_col = None)
 
 #Live Counter of most up-to-date Data
-counter = 'ACCUVISION'
 
 day = get_day()[0]
 
@@ -31,7 +35,7 @@ app.layout = html.Div(
         html.Div([
             html.Div(id = "title"),
             html.Img(src = "assets/Accuvision_Logo_v2.png", height = "70", width = "211.801802"),   #display counter
-            html.H1(counter)
+            html.H1("AccuVision")
 
         ]),
         html.P("Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),  #short message
@@ -49,6 +53,20 @@ app.layout = html.Div(
         ], className = 'text_area'),
         html.Div(children = [
             html.Div([
+                dcc.Dropdown(
+                    id = "buildingSelector",
+                    options = [
+                        {"label": "Costco Heritage", "value": "Costco_Heritage"},
+                        {"label": "Walmart Shawnessy", "value": "Walmart_Shawnessy"},
+                        {"label": "YMCA Shawnessy", "value": "YMCA_Shawnessy"}
+                    ],
+                    style = {'background-color': '#000', 'color': '#000'},
+                    placeholder = "Select a Building",
+                    clearable = False,
+                    className = 'dropdown',
+                    searchable = False
+                ),
+
                 dcc.Dropdown(
                     id="daySelector",    #id that will link dropdown menu to input for callback
                     options=[            #creating labels and values for the labels that are linked to the csv file
@@ -68,6 +86,7 @@ app.layout = html.Div(
                     clearable = False,
                     className = 'dropdown',
                     ),
+
                 dcc.Slider(id = "weekGetter",
                             min = 1,
                             max = 2,
@@ -77,18 +96,19 @@ app.layout = html.Div(
                                 2: {'label': 'Current Week', 'style': {'color': '#fff'}},
                             },
                             className = 'slider',
-                ),
+                )
             ], className = "left_side"),
 
             html.Div([
                 dcc.Graph(id='ourGraph',
                 ), #output for the callback
             ], className = "right_side"),
-        ], className = "side_by_side"),    
-], id= "mainContainer", style={"display": "flex", "flex-direction": "column"})
-
-
-
+        ], className = "side_by_side"), 
+    html.Div([
+        html.P(id = "generalInfo"),
+    ])
+    ],  
+        id= "mainContainer", style={"display": "flex", "flex-direction": "column"})
 
 @app.callback(
     Output('ourGraph', 'figure'),   #output changes to figure
@@ -96,7 +116,6 @@ app.layout = html.Div(
     Input('weekGetter', 'value')
 )
 def update_graph(day, week):
-    #value = day
     if len(day) == 0:
         day = "None"
     if week == 1:
@@ -106,6 +125,14 @@ def update_graph(day, week):
     fig.update_layout(yaxis_title = "Number of People")
     fig.update_layout(legend_title="Day of Week")
     return fig
+
+#@app.callback(
+#    Output('generalInfo', 'info'),
+#    Input('daySelector', 'value'),
+#    Input('buildingSelector', 'value')
+#)
+#def update_info(day, building):
+#    if len(day)
 
 # Running it
 if __name__ == "__main__":
