@@ -280,6 +280,41 @@ def displayLiveCounter(day, building, sheetToReadFrom_Previous):
     #Returning the most recent counter value
     return sheetToReadFrom_Previous.iloc[1046 - 1, dayIndex]
 
+def predictiveRange(day, building, sheetToReadFrom_Previous):
+    input1="{x}".format(x="10:00")
+    input2="{y}".format(y="13:30")
+    pair=[input1,input2]
+
+    prevmonT = pd.DataFrame(sheetToReadFrom_Previous['Monday'])
+    prevmonT.loc[input1,input2]
+    prevmonT.sum()
+
+    prevtueT = pd.DataFrame(sheetToReadFrom_Previous['Tuesday'])
+    prevtueT.loc[input1,input2]
+    prevtueT.sum()
+
+    prevwedT = pd.DataFrame(sheetToReadFrom_Previous['Wednesday'])
+    prevwedT.loc[input1,input2]
+    prevwedT.sum()
+
+    prevthuT = pd.DataFrame(sheetToReadFrom_Previous['Thursday'])
+    prevthuT.loc[input1,input2]
+    prevthuT.sum()
+
+    prevfriT = pd.DataFrame(sheetToReadFrom_Previous['Friday'])
+    prevfriT.loc[input1,input2]
+    prevfriT.sum()
+
+    prevsatT = pd.DataFrame(sheetToReadFrom_Previous['Saturday'])
+    prevsatT.loc[input1,input2]
+    prevsatT.sum()
+
+    prevsunT = pd.DataFrames(heetToReadFrom_Previous['Sunday'])
+    prevsunT.loc[input1,input2]
+    prevsunT.sum()
+
+    bestOption = min(prevmonT, prevtueT, prevwedT, prevthuT, prevfriT, prevsatT, prevsunT)
+    return bestOption
 
 # Running it
 if __name__ == "__main__":
