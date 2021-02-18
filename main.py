@@ -7,15 +7,20 @@ import datetime
 from dayGetter import get_day
 import gspread as GS
 
+# Enables Google API linking to AccuVision
 gc = GS.service_account(filename='creds.json') 
 
+# Starting the time in order to check for time elapsed further down the code.
 start_time = tm.time()
+
+# Reads the sample video and splits into frames
 video = cv.VideoCapture("videos/finalTestVideo.mp4")
 ret, frame1 = video.read()
 ret, frame2 = video.read()
 person_counter = 0
 PositionMarker = ""
 
+# Creates a new CSV file with the required headers
 row = ["Time of Day", "Monday", "Tuesday", "Wednesday",
        "Thursday", "Friday", "Saturday", "Sunday"]
 with open("data/week1.csv", 'a', newline='') as data:
@@ -25,37 +30,29 @@ with open("data/week1.csv", 'a', newline='') as data:
 windowWidth = frame1.shape[1]
 windowHeight = frame1.shape[0]
 
+# This initially sets the previous_x (used later) to half the window width
 previous_x = windowWidth/2
 
-
-def largestContour(contours):
-    largest = 0
-    for contour in contours:
-        if cv.contourArea(contour) > largest:
-            largest = cv.contourArea(contour)
-    return largest
-
-
-def findContour(contours, area):
-    stuff = (1, 2, 3, 4)
-    for contour in contours:
-        if cv.contourArea(contour) == area:
-            print(cv.contourArea(contour))
-            stuff = (x, y, w, h) = cv.boundingRect(contour)
-    return stuff
-
-
+# Booleans that are used later on
 going_left = False
 going_right = False
+
 counter = 0
 contourCount = 0
+
+# Bulk of the processing and analysis
 while video.isOpened():
     cv.resize(frame1, (640, 480))
     going_left = False
     going_right = False
+
+    # Using the get_day function from dayGetter.py to retrieve tuple
     dayTuple = get_day()
     dayNum = dayTuple[1]
+
     counter += 1
+
+    # Frame by frame analysis through absdiff, greyscaling, blurring, dilation
     difference = cv.absdiff(frame1, frame2)
     cv.imshow("divy", difference)
     greyScale = cv.cvtColor(difference, cv.COLOR_BGR2GRAY)

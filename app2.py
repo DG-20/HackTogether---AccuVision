@@ -37,6 +37,9 @@ week1 = pd.read_csv(
     "https://docs.google.com/spreadsheets/d/1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY/export?format=csv", index_col=None
 )
 
+WalShaw_Area = 14519
+CostcoShaw_Area = 13576
+YMCAShaw_Area = 6028
 # Live Counter of most up-to-date Data
 
 day = get_day()[0]
@@ -70,7 +73,7 @@ app.layout = html.Div(
                     clearable=False,
                     className='dropdown',
                     searchable=False,
-                    value = "Walmart-Shawnessy"
+                    value = "YMCA-Shawnessy"
                 ),
 
                 dcc.Dropdown(
@@ -156,7 +159,7 @@ def update_info(day, building):
     daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     #Determining which Google Sheets to read from based on the input of the building
     #With Walmart-Shawnessy as the current default.
-    sheetToReadFrom_Previous = week1#WalShaw_Previous
+    sheetToReadFrom_Previous = YMCAShaw_Previous                  #WalShaw_Previous
     if building == "Costco-Heritage":
         sheetToReadFrom_Previous = CostcoHeritage_Previous
     elif building == "YMCA-Shawnessy":
@@ -207,9 +210,10 @@ def displayLiveCounter(day, building, sheetToReadFrom_Previous):
         dayIndex = 6
     elif day == "Sunday":
         dayIndex = 7
-
+    else:
+        dayIndex = 8
     #Returning the most recent counter value
-    return sheetToReadFrom_Previous.iloc[lastLine - 1, dayIndex]
+    return sheetToReadFrom_Previous.iloc[1046 - 1, dayIndex]
 
 
 # Running it
