@@ -1,156 +1,250 @@
+# importing all the required libraries
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import time
-import datetime
+import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
-from datetime import date
+from dayGetter import get_day
 
-currentDate = date.today()
-year = currentDate.year
-month = currentDate.month
-dayNumber = currentDate.day
+# Setting the template for the graph to a pre-defined plotly theme.
+pio.templates.default = 'plotly_dark'
 
-def dayGet(day, month, year):
-    daysINWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    #dayIndex is an object of datetime
-    dayInd = datetime.date(year, month, day)
-    # .weekday is a method of this object (returns a number)
-    dayofweek = daysINWeek[dayInd.weekday()]
-    return (dayofweek)
-
-day = dayGet(dayNumber, month, year)
-
-# Started the app
+# Starting the app
 app = dash.Dash(__name__)
+app.config.suppress_callback_exceptions = True
 
+# Title for the website.
+app.title = "AccuVision"
 
-# Reading data
-df = pd.read_csv("data/mon.csv")
-df2 = pd.read_csv("data/tues.csv")
+bestTime = ""
+bestDay = ""
+currentCount = ""
 
+# Reading data from Google Sheets using Pandas through URLs as CSV files and storing as data frames.
+WalShaw_Current = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1F-fvele1EorJJ6Vdm8T5gG3lOP_hapmwyIoXEZIeZ6A/export?gid=496819679&format=csv", index_col=None)
+WalShaw_Previous = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1ii_78RxFOF98gipDtC_31VMzUhAfYvOd69R1a3f098A/export?gid=688427654&format=csv",  index_col=None)
+CostcoHeritage_Current = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1Fh37SZr6vFYi-1GGrdAsSrYB8Vv1VGhKWJUeyp981zA/export?gid=1224033525&format=csv", index_col=None)
+CostcoHeritage_Previous = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1dB_NgzL0c5qBn1A3y2rPkRcBDTfSYofg6F0BuZ8eFsk/export?gid=583703077&format=csv", index_col=None)
+YMCAShaw_Previous = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1agLC1TUQz2N_9vle5FXpVZ5lAieVDgidTVmqKw4JbZk/export?gid=1278973156&format=csv", index_col=None)
+YMCAShaw_Current = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1SQOCXvnZUW74ES4R-37HorE3A2_-hnrxnvjq_A1fLK4/export?gid=1144356892&format=csv", index_col=None)
+week1 = pd.read_csv(
+    "https://docs.google.com/spreadsheets/d/1hgcC3dLOoQFVB5-EbkkKNQlFo5GQrcCFzzOsmUSUSWY/export?format=csv", index_col=None)
+
+# Approximate areas of buildings obtained through Google Maps measuring app.
+WalShaw_Area = 14519
+CostcoShaw_Area = 13576
+YMCAShaw_Area = 6028
+
+# Using dayGetter.py to obtain the day of the week.
+day = get_day()[0]
+
+# This is where the HTML5 is incorporated through the .layout backbone of plotly.
 app.layout = html.Div(
     children=[
-        # Random HTML
-        html.H1("HI"),
-        html.P("asdfasdf"),
-        html.A("HIHIHI", href="https://dash.plotly.com/dash-html-components/a"),
-        dcc.Dropdown(
-            id="first-dropdown",
-            options=[
-                {"label": "Saturday", "value": "Sat"},
-                {"label": "Sunday", "value": "Sun"},
-                {"label": "Monday", "value": "Mon"},
-                {"label": "Tuesday", "value": "Tues"},
-                {"label": "Wednesay", "value": "Wed"},
-                {"label": "Thursday", "value": "Thur"},
-                {"label": "Friday", "value": "Fri"},
-            ],
-            multi=True,
-            value="Sat",
-        ),
-        updatemenus=list([
-    dict(
-        buttons=list([
-            dict(
-                args=['type', 'surface'],
-                label='3D Surface',
-                method='restyle'
-            ),
-            dict(
-                args=['type', 'heatmap'],
-                label='Heatmap',
-                method='restyle'
-            )
+        html.Div([
+            # Logo and title.
+            html.Div(id="title"),
+            html.Img(src="assets/Accuvision_Logo_v3.png",
+                     height="70", width="220.925"),
+            html.H1("AccuVision")
+
         ]),
-        direction = 'down',
-        pad = {'r': 10, 't': 10},
-        showactive = True,
-        x = 0.1,
-        xanchor = 'left',
-        y = 1.1,
-        yanchor = 'top'
-    ),
-])
-layout['updatemenus'] = updatemenus
-        html.H1(),
-        html.Button("Saturday", id="btn-1", n_clicks=0),
-        html.Button("Sunday", id="btn-2", n_clicks=0),
-        html.Button("Monday", id="btn-3", n_clicks=0),
-        html.Button("Tuesday", id="btn-4", n_clicks=0),
-        html.Button("Wednesay", id="btn-5", n_clicks=0),
-        html.Button("Thursday", id="btn-6", n_clicks=0),
-        html.Button("Friday", id="btn-7", n_clicks=0),
-        html.Div(id="button"),
-        dcc.Markdown(
-            """
-                We can enter text here
+        # short message
+        html.P(
+            "Please pick the day that you want to view data for, using drop-down menu. Stay safe!"),
 
-                also insert hyperlinks to other [Websites](http://commonmark.org/help).
+        #Introductory message.
+        html.H4("""     In these times of uncertainty during the COVID-19 pandemic, the necessity for limiting public contact is greater than ever. 
+                    In order to assist you with doing so, AccuVision provides real-time data about the number of people within an establishment at 
+                    any given point over the course of the current and past week. We hope AccuVision helps you stay safe in these unprecedented times.""",
+                    title='Introduction to AccuVision',
+                className='text_area'),
 
-                Markdown is a simple way to write and format text.
-                It includes a syntax for things like **bold text** and *italics*,
-                [links](http://commonmark.org/help), inline `code` snippets, lists,
-                quotes, and more.
-                """
-        ),
-        dcc.DatePickerSingle(
-            id="date-picker",
-            date=date(year, month, dayNumber),
-            # value = day,
-        ),
-        # The actual graph to display
-        dcc.Graph(figure=px.line(df, x="Time of Day", y = "value", title="Stuff")),
-        dcc.Graph(figure=px.line(df2, x="Time of Day", y = "value", title="Stuff2")),
-        html.Div(id="test"),
-    ]
-)
+        html.Div(children=[
+            html.Div([
 
+                # Dropdown to select from the establishment that user would like to view data for.
+                dcc.Dropdown(
+                    id="buildingSelector",
+                    options=[
+                        {"label": "Costco Heritage", "value": "Costco-Heritage"},
+                        {"label": "Walmart Shawnessy",
+                            "value": "Walmart-Shawnessy"},
+                        {"label": "YMCA Shawnessy", "value": "YMCA-Shawnessy"}
+                    ],
+                    placeholder="Select a Building",
+                    clearable=False,
+                    className='dropdown',
+                    searchable=False,
+                    # Default selected establishment in this code is YMCA-Shawnessy (customizable).
+                    value = "YMCA-Shawnessy"
+                ),
 
+                # Dropdown to select the day of the week as another required filter.
+                dcc.Dropdown(
+                    # id that will link dropdown menu to input for callbacks.
+                    id="daySelector",  
+                    # Creating labels and values for the labels that are linked to the csv file.
+                    options=[  
+                        {"label": "Saturday", "value": "Saturday"},
+                        {"label": "Sunday", "value": "Sunday"},
+                        {"label": "Monday", "value": "Monday"},
+                        {"label": "Tuesday", "value": "Tuesday"},
+                        {"label": "Wednesday", "value": "Wednesday"},
+                        {"label": "Thursday", "value": "Thursday"},
+                        {"label": "Friday", "value": "Friday"}
+                    ],
+                    # Enables multiple graphs to be displayed and overlayed for better comparison.
+                    multi=True,
+                    # Default value is set to the current day of the week.
+                    value=day,  
+                    placeholder="Select a Day",
+                    searchable=False,
+                    clearable=True,
+                    className='dropdown',
+                ),
+
+                # Slider for selecting which week's information is to be viewed. For demo purposes, both weeks are pre-filled,
+                # however upon deployment, the weekly information will be filled as time progresses.
+                dcc.Slider(id="weekGetter",
+                           min=1,
+                           max=2,
+                           # Default value is set to display previous week information.
+                           value=1,
+                           marks={
+                               1: {'label': 'Previous Week', 'style': {'color': '#fff'}},
+                               2: {'label': 'Current Week', 'style': {'color': '#fff'}},
+                           },
+                           className='slider',
+                           )
+            ], className="left_side"),
+
+            # Div element for the graph. The id is used as output in the callback according to the filters selected.
+            html.Div([
+                dcc.Graph(id='ourGraph'),  
+            ], className="right_side"),
+        ], className="side_by_side"),
+
+        # The div element which contains the general information displayed based on the filters selected
+        html.Div([
+            html.P(id="generalInfo", children=True)
+        ])
+    ],
+    # Added styling to be able to display side by side for a better user experience.
+    id="mainContainer", style={"display": "flex", "flex-direction": "column"})
+
+# First callback. This is to display the graph based on the inputs selected.
 @app.callback(
-    Output("button", "children"),
-    Input("btn-1", "n_clicks"),
-    Input("btn-2", "n_clicks"),
-    Input("btn-3", "n_clicks"),
-    Input("btn-4", "n_clicks"),
-    Input("btn-5", "n_clicks"),
-    Input("btn-6", "n_clicks"),
-    Input("btn-7", "n_clicks"),
+    Output('ourGraph', 'figure'),  
+    Input('daySelector', 'value'),
+    Input('weekGetter', 'value'),
+    Input('buildingSelector', 'value')
 )
-def ifClicked(btn1, btn2, btn3, btn4, btn5, btn6, btn7):
-    change_id = [p["prop_id"] for p in dash.callback_context.triggered][0]
-    if "btn-1" in change_id:
-        fig2 = px.line(df, x = "Time of Day", y = "Saturday", title = "Stuff")
-    elif "btn-2" in change_id:
-        message = "Button 2 was pressed"
-    elif "btn-3" in change_id:
-        message = "Button 3 was pressed"
-    elif "btn-4" in change_id:
-        message = "Button 4 was pressed"
-    elif "btn-5" in change_id:
-        message = "Button 5 was pressed"
-    elif "btn-6" in change_id:
-        message = "Button 6 was pressed"
-    elif "btn-7" in change_id:
-        message = "Button 7 was pressed"
+def update_graph(day, week, building):
+    # Changing the CSV based on the building selected.
+    sheetToReadFrom_Previous = WalShaw_Previous
+    sheetToReadFrom_Current = WalShaw_Current
+    if building == "Costco-Heritage":
+        sheetToReadFrom_Previous = CostcoHeritage_Previous
+        sheetToReadFrom_Current = CostcoHeritage_Current
+    elif building == "YMCA-Shawnessy":
+        sheetToReadFrom_Previous = YMCAShaw_Previous
+        sheetToReadFrom_Current = YMCAShaw_Current
+
+    # If nothing is selected, don't display anything.
+    if len(day) == 0:
+        day = "None"
+
+    # X-axis of graph is Time of Day from csv file, and the y-axis is the day(s) that are selected.
+    if week == 1:
+        fig = px.line(sheetToReadFrom_Previous, x="Time of Day", y=day,
+                      title="Number of People in Building at Different Times")
+    if week == 2:
+        fig = px.line(sheetToReadFrom_Current, x="Time of Day", y=day,
+                      title="Number of People in Building at Different Times")
+
+    # Updating y-axis title and the legend title.
+    fig.update_layout(yaxis_title="Number of People")
+    fig.update_layout(legend_title="Day of Week")
+    return fig
+
+    # Second callback to the paragraph tag where the output is dependent of the filters chosen by the user.
+@app.callback(
+    Output('generalInfo', 'children'),
+    Input('daySelector', 'value'),
+    Input('buildingSelector', 'value')
+)
+def update_info(day, building):
+    daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    #Determining which Google Sheets to read from based on the input of the building
+    #With Walmart-Shawnessy as the current default.
+    sheetToReadFrom_Previous = YMCAShaw_Previous                  #WalShaw_Previous
+    if building == "Costco-Heritage":
+        sheetToReadFrom_Previous = CostcoHeritage_Previous
+    elif building == "YMCA-Shawnessy":
+        sheetToReadFrom_Previous = YMCAShaw_Previous
+    oneDay = True
+    if len(day) != 1:
+        oneDay = False
+    if isinstance(day, str) == True:
+        oneDay = True
+    if oneDay == False:
+        return "Select a day to display general information about it."
     else:
-        message = "Nothing was pressed"
-    return html.Div(fig2)
+        #This returns a string which provides the user the day in the previous week which contained the least number of people in total.
+        indexOfSuggestedDay = dayWithLeast(day, building, sheetToReadFrom_Previous)
+        return f"""
+        According to last week's data, the day with the least number of visitors in {building} was: {daysOfWeek[indexOfSuggestedDay]}.
+                    \nThis is {displayLiveCounter(day, building, sheetToReadFrom_Previous)}."""
 
 
-@app.callback(
-    Output(component_id="test", component_property="children"),
-    Input(component_id="first-dropdown", component_property="value"),
-)
-def update_output_div(input_value):
-    return "output {}".format(input_value)
+def dayWithLeast(day, building, sheetToReadFrom_Previous):
+    prevmon = sheetToReadFrom_Previous['Monday'].sum()
+    prevtue = sheetToReadFrom_Previous['Tuesday'].sum()
+    prevwed = sheetToReadFrom_Previous['Wednesday'].sum()
+    prevthu = sheetToReadFrom_Previous['Thursday'].sum()
+    prevfri = sheetToReadFrom_Previous['Friday'].sum()
+    prevsat = sheetToReadFrom_Previous['Saturday'].sum()
+    prevsun = sheetToReadFrom_Previous['Sunday'].sum()
+    bigday = (prevmon, prevtue, prevwed, prevthu, prevfri, prevsat, prevsun)
+    dayIndex = bigday.index(min(bigday))
+    return dayIndex
+
+def displayLiveCounter(day, building, sheetToReadFrom_Previous):
+    #Finding the total number of lines so as to read the most recent counter value
+    lastLine = len(sheetToReadFrom_Previous)
+
+    #Based on the day, get the column number to read from a specific cell
+    if day == "Monday":
+        dayIndex = 1
+    elif day == "Tuesday":
+        dayIndex = 2
+    elif day == "Wednesday":
+        dayIndex = 3
+    elif day == "Thursday":
+        dayIndex = 4
+    elif day == "Friday":
+        dayIndex = 5
+    elif day == "Saturday":
+        dayIndex = 6
+    elif day == "Sunday":
+        dayIndex = 7
+    else:
+        dayIndex = 8
+    #Returning the most recent counter value
+    return sheetToReadFrom_Previous.iloc[1046 - 1, dayIndex]
 
 
 # Running it
 if __name__ == "__main__":
     app.run_server(debug=True)
-
-# Creating figure
