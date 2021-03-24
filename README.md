@@ -20,8 +20,12 @@ _AccuVision_ is comprised of two major components, one which collects data and t
 **Computer Vision:**
 The backbone of this project is created using the OpenCV library within Python. Live video feed is taken in as input, upon which frame-by-frame analysis is conducted. In order to do so, we enlisted the help of OpenCV methods to first generate a contour mapping of the detected motion after determining the difference between two consecutive frames. Then, we created a three-boundary system where we initially tracked the direction the individuals are moving in at the center of the frame. Subsequently, the live counter incremented or decremented upon the subject moving to the outer boundary in the direction previously specified. The data collected from the movement is then stored and updated periodically in a database linked with the Google Drive API, which is then displayed onto _AccuVision_'s dynamic user interface.
 
+![AccuVision Tracking Demo](https://user-images.githubusercontent.com/58268240/112348235-40c71b80-8c8d-11eb-9055-bc62f4aa0f48.PNG)
+
 **User Interface:**
 The user interface was created using Dash and Plotly with a goal of enhancing user experience through a simple yet functional design. Initially, data is retrieved from the Google Drive database in the format of a CSV file and stored into dataframes using the Pandas library, which was used due to its powerful data manipulation and analysis capabilities. In order for the user to select different filters and preferences to customize the viewable data, we used callbacks through input elements in Plotly. We then updated certain areas of the dashboard in response to these inputs using various functions. One of the key interactive components include filters for manipulating the viewable data based on the day of the week and the building selected. Another significant feature is to display the day with the least risk of public exposure, according to historical data based on a user-specified time range.
+
+![Dashboard - AccuVision](https://user-images.githubusercontent.com/58268240/112348311-53d9eb80-8c8d-11eb-8316-14f49e31e9d6.PNG)
 
 ## Built using:
 * Python
